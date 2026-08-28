@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Prompt", sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* กรอบจำลองขนาดมือถือ 390x546 px */
+.mobile-container {
+    width: 390px;
+    height: 546px;
+    background-color: #ffffff;
+padding: 51px 12px 16px 12px; /* บน 51px, ขวา 12px, ล่าง 16px, ซ้าย 12px */    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ส่วน Header แถบสีเขียว */
+.header-bar {
+    background-color: #1b4b27;
+    color: #ffffff;
+    border-radius: 25px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.logo img {
+    width: 70px;
+    height: 21px;
+}
+
+.company-name {
+    font-size: 8px;
+    line-height: 1.1;
+    font-weight: bold;
+    color: #d1e7dd;
+}
+
+.header-title {
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;   /* จัดข้อความให้อยู่ตรงกลางแนวนอน */
+    flex-grow: 1;         /* ขยายพื้นที่ให้ข้อความครอบคลุมเพื่อจัดกลางเป๊ะ */
+}
+
+/* ส่วนแสดงรายการการ์ดรูปภาพ */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.card {
+    position: relative;
+    width: 319px;
+    height: 190px;
+    border-radius: 37px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 0 auto; /* เพิ่มบรรทัดนี้เพื่อล็อคการ์ดให้อยู่กึ่งกลาง */
+}
+
+.card-list .card:first-child {
+    background: linear-gradient(180deg, #78d07e 17%, #1E3820 100%);
+    box-shadow: inset -9px 9px 8.9px #00000040;
+}
+
+.card-list .card:nth-child(2) {
+    background: linear-gradient(180deg, #bff6c3 0%, #8aae8b 100%);
+    box-shadow: inset 10px 0 17.5px rgba(0, 0, 0, 0.25);
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 100%; /* ขยับตำแหน่งรูปภาพขึ้นข้างบน */
+    filter: brightness(1.15) contrast(1.15); /* เพิ่มความสว่าง 15% และความจัดชัด (Contrast) 15% */}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px 24px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.card-overlay h2 {
+    color: #ffffff;
+    font-size: 32px;
+    font-style: italic;               /* Italic (ตัวเอียง) */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 
+                 0 0 25px rgba(255, 255, 255, 0.5); /* เอฟเฟกต์แสงฟุ้งสว่างด้านหลัง */
+}
