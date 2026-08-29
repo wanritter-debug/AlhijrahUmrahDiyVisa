@@ -40,6 +40,16 @@
 
     <script>
         const LIFF_ID = "2008429094-YTq3YOaG";
+        const umrahLink = document.getElementById('umrah-link');
+
+        // ล็อกไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
+        umrahLink.style.pointerEvents = 'none';
+        umrahLink.style.opacity = '0.5';
+
+        window.addEventListener('load', () => {
+            umrahLink.style.pointerEvents = 'auto';
+            umrahLink.style.opacity = '1';
+        });
 
         (async () => {
             if (typeof liff === "undefined") {
