@@ -64,7 +64,7 @@ async function submitBooking(event) {
         }
         try {
             await liff.sendMessages([{ type: "text", text: messageText }]);
-            alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
+            showSuccessPopup();
             liff.closeWindow();
         } catch (err) {
             console.error("sendMessages Error:", err);
@@ -102,6 +102,32 @@ function showCopyPopup(message) {
         }).catch(() => {
             alert('กรุณาคัดลอกข้อความด้วยตนเองจากช่องข้อความ');
         });
+    };
+}
+
+function showSuccessPopup() {
+    const popup = document.createElement('div');
+    popup.className = 'message-popup';
+    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);display:flex;justify-content:center;align-items:center;z-index:9999;';
+
+    popup.innerHTML = `
+        <div style="background:#fff;padding:32px 28px 24px;border-radius:24px;max-width:85%;width:300px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+            <img src="img/check-circle_1.svg" alt="สำเร็จ" style="width:72px;height:72px;margin-bottom:16px;">
+            <div style="font-size:14px;color:#333;line-height:1.6;margin-bottom:20px;">
+                ส่งข้อมูลเรียบร้อยแล้วค่ะ<br>
+                เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด
+            </div>
+            <button id="successOkBtn" style="width:100%;padding:12px;border:1.5px solid #333;border-radius:24px;background:#fff;font-size:15px;font-weight:600;cursor:pointer;">ตกลง</button>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById('successOkBtn').onclick = function () {
+        popup.remove();
+        if (typeof liff !== "undefined" && liff.isInClient && liff.isInClient()) {
+            liff.closeWindow();
+        }
     };
 }
 
