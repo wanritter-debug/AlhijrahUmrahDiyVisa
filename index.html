@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>วีซ่าอุมเราะห์ ซาอุดีอาระเบีย</title>
     <link rel="stylesheet" href="css/main.css">
+    <!-- โหลด LIFF SDK ที่หน้าแรกด้วย เพื่อให้ handshake สมบูรณ์ -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
 
@@ -38,6 +40,23 @@
             </div>
         </main>
     </div>
+
+    <script>
+        // เรียก liff.init() ที่หน้าแรก (primary redirect URL) เพื่อให้ handshake สมบูรณ์
+        // ก่อนที่ผู้ใช้จะกดลิงก์ไปหน้าถัดไป
+        window.addEventListener('load', async () => {
+            if (typeof liff === "undefined") {
+                console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
+                return;
+            }
+            try {
+                await liff.init({ liffId: "2008429094-YTq3YOaG" });
+                console.log("LIFF init สำเร็จที่หน้าแรก");
+            } catch (err) {
+                console.error("LIFF Init Error (index.html):", err);
+            }
+        });
+    </script>
 
 </body>
 </html>
