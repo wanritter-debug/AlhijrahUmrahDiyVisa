@@ -4,6 +4,7 @@ let userProfile = null;
 const LIFF_ID = "2008429094-YTq3YOaG";
 
 // 1. เริ่มต้นโหลด LIFF ทันทีที่เปิดหน้าเว็บ
+// 1. เริ่มต้นโหลด LIFF ทันทีที่เปิดหน้าเว็บ (แบบไม่สั่ง Login ทันที)
 window.addEventListener('load', async () => {
     if (typeof liff === "undefined") {
         console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
@@ -12,13 +13,11 @@ window.addEventListener('load', async () => {
 
     try {
         await liff.init({ liffId: LIFF_ID });
-        if (liff.isInClient()) {
-            isLiffReady = true;
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            } else {
-                userProfile = await liff.getProfile();
-            }
+        isLiffReady = true; // กำหนดให้ LIFF พร้อมใช้งาน
+
+        // ดึงโปรไฟล์เฉพาะกรณีผู้ใช้ล็อกอินไว้อยู่แล้วเท่านั้น (ถ้ายังไม่ล็อกอิน ปล่อยผ่านไปก่อน)
+        if (liff.isInClient() && liff.isLoggedIn()) {
+            userProfile = await liff.getProfile();
         }
     } catch (err) {
         console.error("LIFF Init Error:", err);
@@ -52,14 +51,22 @@ async function submitBooking(event) {
         `💰 ราคารวม: ${priceDisplay}`;
 
     // กรณีเปิดผ่าน LINE App และ LIFF พร้อมใช้งาน
+    // กรณีเปิดผ่าน LINE App
     if (isLiffReady && liff.isInClient()) {
+        // เช็คล็อกอินเฉพาะตอนกดส่งข้อมูล
+        if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+        }
+
         try {
             await liff.sendMessages([{ type: "text", text: messageText }]);
             alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
             liff.closeWindow();
         } catch (err) {
             console.error("sendMessages Error:", err);
-            alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + err.message);
+            // ถ้าส่งข้อความผ่าน LIFF ไม่ผ่าน ให้ใช้ระบบ Popup สำรอง
+            showCopyPopup(messageText);
         }
     } else {
         // กรณีเปิดนอก LINE App -> แสดง Popup คัดลอกข้อความ

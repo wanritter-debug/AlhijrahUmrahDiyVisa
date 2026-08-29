@@ -6,7 +6,7 @@
     <title>อุมเราะห์วีซ่า</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- โหลด LINE LIFF SDK (เพิ่มเข้ามาใหม่) -->
+    <!-- โหลด LINE LIFF SDK เพียงจุดเดียว -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
@@ -41,67 +41,66 @@
             </ul>
         </div>
 
-        <!-- ฟิลด์ ชื่อ-สกุล ผู้ติดต่อ (เพิ่ม id="fullName") -->
-        <div class="form-group">
-            <label>ชื่อ-สกุล ผู้ติดต่อ</label>
-            <div class="input-text">
-                <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล">
+        <!-- ครอบด้วยแท็ก <form> เพื่อคุม Event การกดคีย์บอร์ดบนมือถือ -->
+        <form id="bookingForm" onsubmit="event.preventDefault(); submitBooking(event);">
+            <!-- ฟิลด์ ชื่อ-สกุล ผู้ติดต่อ -->
+            <div class="form-group">
+                <label>ชื่อ-สกุล ผู้ติดต่อ</label>
+                <div class="input-text">
+                    <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
+                </div>
             </div>
-        </div>
 
-        <!-- ฟิลด์ เบอร์โทรศัพท์ (เพิ่ม id="phone") -->
-        <div class="form-group">
-            <label>เบอร์โทรศัพท์</label>
-            <div class="input-text">
-                <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์">
+            <!-- ฟิลด์ เบอร์โทรศัพท์ -->
+            <div class="form-group">
+                <label>เบอร์โทรศัพท์</label>
+                <div class="input-text">
+                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+                </div>
             </div>
-        </div>
 
-        <!-- Quantity Counter -->
-        <div class="form-group">
-            <label>จำนวน</label>
-            <div class="counter-control">
-                <button type="button" class="btn-counter btn-plus" id="btn-plus">+</button>
-                <input type="number" value="1" readonly class="counter-input" id="qty-input">
-                <button type="button" class="btn-counter btn-minus" id="btn-minus">-</button>
+            <!-- Quantity Counter -->
+            <div class="form-group">
+                <label>จำนวน</label>
+                <div class="counter-control">
+                    <button type="button" class="btn-counter btn-plus" id="btn-plus">+</button>
+                    <input type="number" value="1" readonly class="counter-input" id="qty-input">
+                    <button type="button" class="btn-counter btn-minus" id="btn-minus">-</button>
+                </div>
             </div>
-        </div>
 
-        <!-- Form Elements (เพิ่ม id="hotelMakkah" และ id="hotelMadinah") -->
-        <div class="form-group">
-            <label>เลือกชื่อโรงแรมมักกะฮ์</label>
-            <div class="input-search">
-                <input type="text" id="hotelMakkah" placeholder="ระบุโรงแรมมักกะฮ์">
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <!-- Form Elements -->
+            <div class="form-group">
+                <label>เลือกชื่อโรงแรมมักกะฮ์</label>
+                <div class="input-search">
+                    <input type="text" id="hotelMakkah" placeholder="ระบุโรงแรมมักกะฮ์">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
-            <div class="input-search">
-                <input type="text" id="hotelMadinah" placeholder="ระบุโรงแรมมาดีนะฮ์">
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <div class="form-group">
+                <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
+                <div class="input-search">
+                    <input type="text" id="hotelMadinah" placeholder="ระบุโรงแรมมาดีนะฮ์">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
             </div>
-        </div>
 
-        <!-- Price Display -->
-        <div class="form-group">
-            <label>ราคา</label>
-            <div class="price-box" id="price-display">6,500 บาท</div>
-            
-            <div class="discount-badge" id="discount-badge">
-                🔥 เดินทาง 6 ท่านขึ้นไป ลดสูงสุด 15%!
+            <!-- Price Display -->
+            <div class="form-group">
+                <label>ราคา</label>
+                <div class="price-box" id="price-display">6,500 บาท</div>
+                
+                <div class="discount-badge" id="discount-badge">
+                    🔥 เดินทาง 6 ท่านขึ้นไป ลดสูงสุด 15%!
+                </div>
             </div>
-        </div>
 
-        <!-- Submit Button (เพิ่ม onclick="submitBooking()") -->
-        <button type="button" class="btn-submit" onclick="submitBooking(event)">ดำเนินการ</button>
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">ดำเนินการ</button>
+        </form>
     </div>
     
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="js/script.js"></script>
-
-
 </body>
 </html>
-
