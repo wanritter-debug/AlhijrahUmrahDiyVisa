@@ -8,16 +8,6 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    const lockKey = 'liff_init_lock_time';
-    const now = Date.now();
-    const lastInitTime = parseInt(sessionStorage.getItem(lockKey) || '0');
-
-    if (now - lastInitTime < 1500) {
-        console.warn("ตรวจพบการ init ถี่เกินไป (อาจเป็น race condition) - รอสักครู่ก่อนลองใหม่");
-        return;
-    }
-    sessionStorage.setItem(lockKey, String(now));
-
     try {
         await liff.init({ liffId: LIFF_ID });
         isLiffReady = true;
