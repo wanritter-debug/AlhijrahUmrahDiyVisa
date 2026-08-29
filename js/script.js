@@ -57,9 +57,9 @@ function submitBooking(event) {
         }, 500);
       }
     })
-    .catch(err => {
+.catch(err => {
       console.error("LIFF Error:", err);
-      alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + (err.message || err));
+      alert("เกิดข้อผิดพลาด: " + JSON.stringify(err));
     });
 }
 
