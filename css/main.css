@@ -14,6 +14,7 @@ body {
     justify-content: center;
     align-items: flex-start; /* เปลี่ยนจาก center เป็น flex-start */
     min-height: 100vh;
+    scrollbar-gutter: stable;
 }
 
 /* กรอบจำลองขนาดมือถือ 390x546 px */
@@ -23,12 +24,14 @@ body {
     background-color: #ffffff;
     padding: 16px 12px; /* ปรับ padding ด้านบนลงเหลือ 16px หรือตั้งเป็น 0px หากต้องการให้ชิดสนิท */
     margin-top: 0;      /* กำหนด margin ด้านบนเป็น 0 */
+    margin: 0 auto; /* ล็อคกรอบให้อยู่กึ่งกลางหน้าจอเสมอ */
     overflow-y: auto;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    box-sizing: border-box; /* คำนวณขนาดกว้างยาวรวม Padding ป้องกันขนาดเคลื่อน */
 }
 
 /* ส่วน Header แถบสีเขียว */
@@ -36,10 +39,19 @@ body {
     background-color: #1b4b27;
     color: #ffffff;
     border-radius: 25px;
+    width: 365px;             /* กำหนดความกว้าง 372px */
+    height: 31px;             /* กำหนดความสูง 31px */
     padding: 8px 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start; /* เปลี่ยนจาก space-between เป็น flex-start */
+    gap: 8px;                   /* ปรับระยะห่างระหว่างโลโก้กับตัวหนังสือ (ลองปรับลด-เพิ่มได้ครับ) */
+}
+
+.header-bar img {
+    width: 70px;
+    height: 21px;
+    object-fit: contain; /* ป้องกันรูปบิดเบี้ยว */
 }
 
 .logo {
@@ -63,8 +75,9 @@ body {
 .header-title {
     font-size: 10px;
     font-weight: 400;
-    text-align: center;   /* จัดข้อความให้อยู่ตรงกลางแนวนอน */
-    flex-grow: 1;         /* ขยายพื้นที่ให้ข้อความครอบคลุมเพื่อจัดกลางเป๊ะ */
+    text-align: left;    /* เปลี่ยนจาก center เป็น left เพื่อให้ข้อความชิดซ้าย */
+    flex-grow: 0;        /* เปลี่ยนจาก 1 เป็น 0 เพื่อไม่ให้ยืดขยายพื้นที่ */
+    margin-left: 59px;      /* หากต้องการดึงให้ชิดโลโก้เข้าไปอีก สามารถใส่ค่าติดลบได้ เช่น -5px */
 }
 
 /* ส่วนแสดงรายการการ์ดรูปภาพ */
@@ -130,19 +143,19 @@ body {
 .back-btn {
     color: #ffffff;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 10px;
     display: flex;
     align-items: center;
     gap: 6px;
     z-index: 1;
 }
 .detail-header .header-title {
-    position: absolute;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 500;
+    position: static;
+    font-size: 10px;
+    font-weight: 400;
+    text-align: left;
+    flex-grow: 0;
+    margin-left: 90px;
 }
 
 /* การ์ดข้อความรายละเอียด */
@@ -262,4 +275,82 @@ body {
     font-weight: 700;
     cursor: pointer;
     margin-top: 8px;
+}
+
+.mobile-container.detail-container {
+    height: 844px;
+}
+
+/* อินพุตข้อความทั่วไป (ชื่อ-สกุล, เบอร์โทรศัพท์) */
+.input-text input {
+    width: 100%;
+    height: 38px;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 20px;
+    padding: 0 16px;
+    outline: none;
+}
+
+/* ปุ่มเพิ่ม-ลดจำนวน (ทำขอบมนกลมล้อมกรอบรวม) */
+.counter-control {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #f2f2f2;
+}
+
+.btn-counter {
+    width: 50px;
+    height: 100%;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.btn-plus {
+    background-color: #7FD085;
+    border-radius: 20px 0 0 20px;
+}
+
+.btn-minus {
+    background-color: #cccccc;
+    border-radius: 0 20px 20px 0;
+}
+
+.counter-input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    background-color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    outline: none;
+}
+
+/* ปุ่มดำเนินการ (ปรับขอบมนเพิ่มขึ้นตามรูป) */
+.btn-submit {
+    width: 100%;
+    height: 52px;
+    background-color: #1b4b27;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.discount-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666666;
+    text-align: center;
+    margin-top: 4px;
+    transition: all 0.3s ease;
 }

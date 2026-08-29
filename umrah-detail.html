@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="mobile-container">
+    <div class="mobile-container detail-container">
         <!-- Header Bar -->
         <div class="header-bar detail-header">
             <a href="index.html" class="back-btn">
                 <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
             </a>
-            <span class="header-title">อุมเราะห์วีซ่า</span>
+            <span class="header-title">วีซ่าอุมเราะห์</span>
         </div>
 
         <!-- Section 1 -->
@@ -39,7 +39,33 @@
             </ul>
         </div>
 
-        <!-- Form Elements -->
+        <!-- ฟิลด์ ชื่อ-สกุล ผู้ติดต่อ -->
+        <div class="form-group">
+            <label>ชื่อ-สกุล ผู้ติดต่อ</label>
+            <div class="input-text">
+                <input type="text" placeholder="">
+            </div>
+        </div>
+
+        <!-- ฟิลด์ เบอร์โทรศัพท์ -->
+        <div class="form-group">
+            <label>เบอร์โทรศัพท์</label>
+            <div class="input-text">
+                <input type="tel" placeholder="">
+            </div>
+        </div>
+
+        <!-- Quantity Counter (เพิ่ม id สำหรับสคริปต์) -->
+        <div class="form-group">
+            <label>จำนวน</label>
+            <div class="counter-control">
+                <button type="button" class="btn-counter btn-plus" id="btn-plus">+</button>
+                <input type="number" value="1" readonly class="counter-input" id="qty-input">
+                <button type="button" class="btn-counter btn-minus" id="btn-minus">-</button>
+            </div>
+        </div>
+
+        <!-- Form Elements (เลือกโรงแรม) -->
         <div class="form-group">
             <label>เลือกชื่อโรงแรมมักกะฮ์</label>
             <div class="input-search">
@@ -56,24 +82,68 @@
             </div>
         </div>
 
-        <!-- Quantity Counter -->
-        <div class="form-group">
-            <label>จำนวน</label>
-            <div class="counter-control">
-                <button class="btn-counter btn-plus">+</button>
-                <input type="number" value="1" readonly class="counter-input">
-                <button class="btn-counter btn-minus">-</button>
-            </div>
-        </div>
-
-        <!-- Price Display -->
+            <!-- Price Display -->
         <div class="form-group">
             <label>ราคา</label>
-            <div class="price-box">6,500 บาท</div>
+            <div class="price-box" id="price-display">6,500 บาท</div>
+            
+            <!-- ข้อความโปรโมชันส่วนลด (เพิ่มใหม่) -->
+            <div class="discount-badge" id="discount-badge">
+                🔥 เดินทาง 6 ท่านขึ้นไป ลดสูงสุด 15%!
+            </div>
         </div>
 
         <!-- Submit Button -->
         <button class="btn-submit">ดำเนินการ</button>
     </div>
+
+    <!-- ดึงไฟล์ JS แยกเข้ามาใช้งาน -->
+    <script src="js/script.js"></script>
+
+    <script>
+      function submitBooking() {
+        const LIFF_ID = "2008429094-YTq3YOaG";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnSgVoJjbVVJyiGGya93ZymSsYPJH3o5snYxtzuy2RdlKjWcq5pFOEtouaDM7GCGMy/exec";
+
+        liff.init({ liffId: LIFF_ID }).then(() => {
+          // ดึงข้อมูลจากช่องกรอก
+          const formData = {
+            replyToken: liff.getContext() ? liff.getContext().replyToken : null,
+            fullName: document.getElementById("fullName").value,
+            phone: document.getElementById("phone").value,
+            qty: document.getElementById("qty-input").value,
+            hotelMakkah: document.getElementById("hotelMakkah").value,
+            hotelMadinah: document.getElementById("hotelMadinah").value,
+            totalPrice: document.getElementById("price-display").innerText
+          };
+
+          // ตรวจสอบข้อมูลก่อนส่ง
+          if (!formData.fullName || !formData.phone) {
+            alert("กรุณากรอกชื่อ-สกุล และเบอร์โทรศัพท์ให้ครบถ้วน");
+            return;
+          }
+
+          // ยิงข้อมูลไปหา Google Apps Script
+          fetch(WEB_APP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(formData)
+          })
+          .then(res => res.json())
+          .then(data => {
+            alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
+            liff.closeWindow(); // ปิดหน้าต่าง LIFF
+          })
+          .catch(err => {
+            console.error(err);
+            alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+          });
+
+        }).catch(err => {
+          console.error("LIFF Error: ", err);
+        });
+      }
+    </script>
+
 </body>
 </html>
