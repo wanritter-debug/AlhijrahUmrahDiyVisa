@@ -1,5 +1,9 @@
 // ฟังก์ชันส่งข้อมูลการจอง
-function submitBooking() {
+// 1. ฟังก์ชันส่งข้อมูลการจอง (วางแทนที่ submitBooking เดิม)
+// 1. ฟังก์ชันส่งข้อมูลการจอง (ใส่ไว้ส่วนบนสุดของไฟล์ js/script.js)
+function submitBooking(event) {
+  if (event) event.preventDefault(); // ป้องกันหน้าเว็บ Reload หรือเด้งกลับหน้าแรก
+
   const LIFF_ID = "2008429094-YTq3YOaG";
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnSgVoJjbVVJyiGGya93ZymSsYPJH3o5snYxtzuy2RdlKjWcq5pFOEtouaDM7GCGMy/exec";
 
@@ -38,22 +42,128 @@ function submitBooking() {
         body: JSON.stringify(formData)
       });
     })
-    .then(res => res.json())
+    .then(res => res ? res.json() : null)
     .then(data => {
-      if (data.status === "success") {
+      if (data && data.status === "success") {
         alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
         if (liff.isInClient()) {
-          liff.closeWindow();
+          setTimeout(() => {
+            liff.closeWindow();
+          }, 500);
         }
-      } else {
+      } else if (data) {
         alert("เกิดข้อผิดพลาดจากระบบ: " + data.message);
       }
     })
     .catch(err => {
       console.error("LIFF Error:", err);
-      alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+      alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + err.message);
     });
 }
+
+// 2. ส่วนคำนวณราคาและปุ่มบวกลบ (ต่อท้ายลงมาด้านล่าง)
+document.addEventListener('DOMContentLoaded', () => {
+    const plusBtn = document.getElementById('btn-plus');
+    const minusBtn = document.getElementById('btn-minus');
+    const qtyInput = document.getElementById('qty-input');
+    const priceDisplay = document.getElementById('price-display');
+    const discountBadge = document.getElementById('discount-badge');
+
+    function updatePrice() {
+        let qty = parseInt(qtyInput.value) || 1;
+        let pricePerPerson = 6500;
+
+        if (qty >= 6 && qty <= 9) {
+            pricePerPerson = 5800;
+            if (discountBadge) {
+                discountBadge.textContent = '🎉 ประหยัด 10% (ลด 700 บาท/ท่าน)';
+                discountBadge.style.color = '#2e7d32';
+            }
+        } else if (qty >= 10) {
+            pricePerPerson = 5500;
+            if (discountBadge) {
+                discountBadge.textContent = '🔥 คุ้มที่สุด! ประหยัด 15% (ลด 1,000 บาท/ท่าน)';
+                discountBadge.style.color = '#d32f2f';
+            }
+        } else {
+            if (discountBadge) {
+                discountBadge.textContent = '💡 เดินทาง 6 ท่านขึ้นไป รับส่วนลดสูงสุด 15%';
+                discountBadge.style.color = '#666666';
+            }
+        }
+
+        let totalPrice = qty * pricePerPerson;
+        if (priceDisplay) priceDisplay.textContent = totalPrice.toLocaleString() + ' บาท';
+    }
+
+    if (plusBtn && minusBtn && qtyInput && priceDisplay) {
+        plusBtn.addEventListener('click', () => {
+            let qty = parseInt(qtyInput.value) || 1;
+            qtyInput.value = qty + 1;
+            updatePrice();
+        });
+
+        minusBtn.addEventListener('click', () => {
+            let qty = parseInt(qtyInput.value) || 1;
+            if (qty > 1) {
+                qtyInput.value = qty - 1;
+                updatePrice();
+            }
+        });
+    }
+});
+
+// 2. ส่วนคำนวณราคาและปุ่มบวกลบ (อยู่ต่อท้ายด้านล่าง)
+document.addEventListener('DOMContentLoaded', () => {
+    const plusBtn = document.getElementById('btn-plus');
+    const minusBtn = document.getElementById('btn-minus');
+    const qtyInput = document.getElementById('qty-input');
+    const priceDisplay = document.getElementById('price-display');
+    const discountBadge = document.getElementById('discount-badge');
+
+    function updatePrice() {
+        let qty = parseInt(qtyInput.value) || 1;
+        let pricePerPerson = 6500;
+
+        if (qty >= 6 && qty <= 9) {
+            pricePerPerson = 5800;
+            if (discountBadge) {
+                discountBadge.textContent = '🎉 ประหยัด 10% (ลด 700 บาท/ท่าน)';
+                discountBadge.style.color = '#2e7d32';
+            }
+        } else if (qty >= 10) {
+            pricePerPerson = 5500;
+            if (discountBadge) {
+                discountBadge.textContent = '🔥 คุ้มที่สุด! ประหยัด 15% (ลด 1,000 บาท/ท่าน)';
+                discountBadge.style.color = '#d32f2f';
+            }
+        } else {
+            if (discountBadge) {
+                discountBadge.textContent = '💡 เดินทาง 6 ท่านขึ้นไป รับส่วนลดสูงสุด 15%';
+                discountBadge.style.color = '#666666';
+            }
+        }
+
+        let totalPrice = qty * pricePerPerson;
+        if (priceDisplay) priceDisplay.textContent = totalPrice.toLocaleString() + ' บาท';
+    }
+
+    if (plusBtn && minusBtn && qtyInput && priceDisplay) {
+        plusBtn.addEventListener('click', () => {
+            let qty = parseInt(qtyInput.value) || 1;
+            qtyInput.value = qty + 1;
+            updatePrice();
+        });
+
+        minusBtn.addEventListener('click', () => {
+            let qty = parseInt(qtyInput.value) || 1;
+            if (qty > 1) {
+                qtyInput.value = qty - 1;
+                updatePrice();
+            }
+        });
+    }
+});
 
 // ฟังก์ชันคำนวณราคาและปุ่มบวกลบ
 document.addEventListener('DOMContentLoaded', () => {
