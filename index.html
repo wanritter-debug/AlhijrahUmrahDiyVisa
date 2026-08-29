@@ -8,47 +8,8 @@
     <!-- โหลด LIFF SDK ที่หน้าแรกด้วย เพื่อให้ handshake สมบูรณ์ -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-    <style>
-        #liff-loading-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.92);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 99999;
-            transition: opacity 0.25s ease;
-        }
-        #liff-loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .liff-spinner {
-            width: 36px;
-            height: 36px;
-            border: 4px solid #ddd;
-            border-top-color: #00b900;
-            border-radius: 50%;
-            animation: liff-spin 0.8s linear infinite;
-            margin-bottom: 12px;
-        }
-        @keyframes liff-spin {
-            to { transform: rotate(360deg); }
-        }
-        #liff-loading-overlay p {
-            font-size: 14px;
-            color: #555;
-        }
-    </style>
 </head>
 <body>
-
-    <div id="liff-loading-overlay">
-        <div class="liff-spinner"></div>
-        <p>กำลังเตรียมระบบ...</p>
-    </div>
 
     <div class="mobile-container">
         <header class="header-bar">
@@ -79,25 +40,10 @@
 
     <script>
         const LIFF_ID = "2008429094-YTq3YOaG";
-        const overlay = document.getElementById('liff-loading-overlay');
 
-        function unlockPage(reason) {
-            if (overlay.classList.contains('hidden')) return;
-            overlay.classList.add('hidden');
-            console.log("ปลดล็อกหน้าเว็บ เหตุผล:", reason);
-        }
-
-        const FAILSAFE_MS = 8000;
-        const failsafeTimer = setTimeout(() => {
-            unlockPage("timeout - เน็ตช้าหรือ liff.init() ค้าง");
-        }, FAILSAFE_MS);
-
-        // ทำงานทันที ไม่ต้องรอ window 'load' (ซึ่งรอรูปภาพโหลดเสร็จหมดก่อน)
         (async () => {
             if (typeof liff === "undefined") {
                 console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
-                clearTimeout(failsafeTimer);
-                unlockPage("ไม่มี LIFF SDK");
                 return;
             }
             try {
@@ -105,9 +51,6 @@
                 console.log("LIFF init สำเร็จที่หน้าแรก");
             } catch (err) {
                 console.error("LIFF Init Error (index.html):", err);
-            } finally {
-                clearTimeout(failsafeTimer);
-                unlockPage("liff.init() เสร็จสิ้น (สำเร็จหรือ error ก็ตาม)");
             }
         })();
     </script>
