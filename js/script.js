@@ -8,11 +8,15 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    if (sessionStorage.getItem('liff_init_lock') === 'true') {
-        console.warn("ตรวจพบความเสี่ยง redirect loop - ข้ามการ init ซ้ำ");
+    const lockKey = 'liff_init_lock_time';
+    const now = Date.now();
+    const lastInitTime = parseInt(sessionStorage.getItem(lockKey) || '0');
+
+    if (now - lastInitTime < 1500) {
+        console.warn("ตรวจพบการ init ถี่เกินไป (อาจเป็น race condition) - รอสักครู่ก่อนลองใหม่");
         return;
     }
-    sessionStorage.setItem('liff_init_lock', 'true');
+    sessionStorage.setItem(lockKey, String(now));
 
     try {
         await liff.init({ liffId: LIFF_ID });
@@ -21,10 +25,8 @@ window.addEventListener('load', async () => {
         if (liff.isInClient() && liff.isLoggedIn()) {
             userProfile = await liff.getProfile();
         }
-        sessionStorage.removeItem('liff_init_lock');
     } catch (err) {
         console.error("LIFF Init Error:", err);
-        sessionStorage.removeItem('liff_init_lock');
     }
 });
 
