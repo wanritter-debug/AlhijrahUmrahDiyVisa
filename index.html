@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>วีซ่าอุมเราะห์ ซาอุดีอาระเบีย</title>
-    <link rel="stylesheet" href="css/main.css">
-    <!-- โหลด LIFF SDK ที่หน้าแรกด้วย เพื่อให้ handshake สมบูรณ์ -->
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- โหลด LINE LIFF SDK เพียงจุดเดียว ใช้ทั้งเว็บ -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
 
-    <div class="mobile-container">
+    <!-- ============ หน้า 1: รายการการ์ด ============ -->
+    <div class="mobile-container" id="page-list">
         <header class="header-bar">
             <div class="logo">
                 <img src="img/logo-with-text white 1.svg" alt="ALHURAH LTD PART.">
@@ -20,14 +23,12 @@
         </header>
 
         <main class="card-list">
-            <a href="umrah-detail.html" id="umrah-link" style="text-decoration: none; display: block; color: inherit;">
-                <div class="card">
-                    <img src="img/Group 11.svg" alt="วีซ่าอุมเราะห์" class="card-img">
-                    <div class="card-overlay">
-                        <h2>วีซ่าอุมเราะห์</h2>
-                    </div>
+            <div class="card" id="umrah-link" style="cursor:pointer;">
+                <img src="img/Group 11.svg" alt="วีซ่าอุมเราะห์" class="card-img">
+                <div class="card-overlay">
+                    <h2>วีซ่าอุมเราะห์</h2>
                 </div>
-            </a>
+            </div>
 
             <div class="card">
                 <img src="img/Group 12.svg" alt="วีซ่าท่องเที่ยว" class="card-img">
@@ -38,32 +39,88 @@
         </main>
     </div>
 
-    <script>
-        const LIFF_ID = "2008429094-YTq3YOaG";
-        const umrahLink = document.getElementById('umrah-link');
+    <!-- ============ หน้า 2: รายละเอียด + ฟอร์มจอง ============ -->
+    <div class="mobile-container detail-container" id="page-detail" style="display:none;">
+        <div class="header-bar detail-header">
+            <a href="#" class="back-btn" id="back-link">
+                <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
+            </a>
+            <span class="header-title">วีซ่าอุมเราะห์</span>
+        </div>
 
-        // ล็อกไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
-        umrahLink.style.pointerEvents = 'none';
-        umrahLink.style.opacity = '0.5';
+        <div class="info-card">
+            <div class="badge-tag">1 สิ่งที่ลูกค้าจะได้รับ</div>
+            <ul class="info-list">
+                <li>1.1 วีซ่าอุมเราะห์อายุการใช้งาน 3 เดือนหลังจากวีซ่าออก</li>
+                <li>1.2 ประกันสุขภาพคุ้มครองค่ารักษาพยาบาลสูงสุด 100,000 รียาล</li>
+                <li>1.3 บริการจองเข้าเราเฎาะห์</li>
+                <li>1.4 สิทธิ์ซื้อน้ำซัมซัมที่สนามบิน</li>
+            </ul>
+        </div>
 
-        window.addEventListener('load', () => {
-            umrahLink.style.pointerEvents = 'auto';
-            umrahLink.style.opacity = '1';
-        });
+        <div class="info-card">
+            <div class="badge-tag">2 เอกสารเพื่อดำเนินการ</div>
+            <ul class="info-list">
+                <li>2.1 พาสปอร์ตที่มีอายุมากกว่า 6 เดือน นับจากวันที่เดินทาง</li>
+                <li>2.2 สำเนาหน้าพาสปอร์ต</li>
+                <li>2.3 รูปถ่ายพื้นหลังสีขาว</li>
+                <li>2.4 การยืนยันจากทางที่พักมักกะฮ์และเมดิฮะฮ์ โดยที่พักจะต้องอยู่ในระบบ</li>
+            </ul>
+        </div>
 
-        (async () => {
-            if (typeof liff === "undefined") {
-                console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
-                return;
-            }
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                console.log("LIFF init สำเร็จที่หน้าแรก");
-            } catch (err) {
-                console.error("LIFF Init Error (index.html):", err);
-            }
-        })();
-    </script>
+        <form id="bookingForm" onsubmit="event.preventDefault(); submitBooking(event);">
+            <div class="form-group">
+                <label>ชื่อ-สกุล ผู้ติดต่อ</label>
+                <div class="input-text">
+                    <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <label>เบอร์โทรศัพท์</label>
+                <div class="input-text">
+                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>จำนวน</label>
+                <div class="counter-control">
+                    <button type="button" class="btn-counter btn-plus" id="btn-plus">+</button>
+                    <input type="number" value="1" readonly class="counter-input" id="qty-input">
+                    <button type="button" class="btn-counter btn-minus" id="btn-minus">-</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>เลือกชื่อโรงแรมมักกะฮ์</label>
+                <div class="input-search">
+                    <input type="text" id="hotelMakkah" placeholder="ระบุโรงแรมมักกะฮ์">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
+                <div class="input-search">
+                    <input type="text" id="hotelMadinah" placeholder="ระบุโรงแรมมาดีนะฮ์">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ราคา</label>
+                <div class="price-box" id="price-display">6,500 บาท</div>
+
+                <div class="discount-badge" id="discount-badge">
+                    🔥 เดินทาง 6 ท่านขึ้นไป ลดสูงสุด 15%!
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">ดำเนินการ</button>
+        </form>
+    </div>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

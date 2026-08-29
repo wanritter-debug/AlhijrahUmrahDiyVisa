@@ -1,27 +1,36 @@
-let isLiffReady = false;
-let userProfile = null;
 const LIFF_ID = "2008429094-YTq3YOaG";
+let userProfile = null;
 
-// ทำงานทันที ไม่ต้องรอ window 'load' (กันปัญหาเน็ตช้า/รูปโหลดช้า)
-(async () => {
+// 1. เรียก liff.init() ครั้งเดียวตอนโหลดเว็บ ไม่ต้อง re-init อีกเลยตลอดการใช้งาน
+let liffInitPromise = (async () => {
     if (typeof liff === "undefined") {
         console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
-        return;
+        return false;
     }
-
     try {
         await liff.init({ liffId: LIFF_ID });
-        isLiffReady = true;
-
         if (liff.isInClient() && liff.isLoggedIn()) {
             userProfile = await liff.getProfile();
         }
+        return true;
     } catch (err) {
         console.error("LIFF Init Error:", err);
+        return false;
     }
 })();
 
-// 2. ฟังก์ชันส่งข้อมูลการจอง
+// 2. ฟังก์ชันสลับหน้า (แทนการเปลี่ยนไฟล์ html)
+function showDetailPage() {
+    document.getElementById('page-list').style.display = 'none';
+    document.getElementById('page-detail').style.display = 'flex';
+}
+
+function showListPage() {
+    document.getElementById('page-detail').style.display = 'none';
+    document.getElementById('page-list').style.display = 'flex';
+}
+
+// 3. ฟังก์ชันส่งข้อมูลการจอง
 async function submitBooking(event) {
     if (event) event.preventDefault();
 
@@ -37,7 +46,6 @@ async function submitBooking(event) {
         return;
     }
 
-    // จัดรูปแบบข้อความ
     const messageText = `📌 รายการจองวีซ่าอุมเราะห์ใหม่\n` +
         `-------------------------\n` +
         `👤 ชื่อ-สกุล: ${fullName}\n` +
@@ -47,31 +55,27 @@ async function submitBooking(event) {
         `🏨 โรงแรมมาดีนะฮ์: ${hotelMadinah}\n` +
         `💰 ราคารวม: ${priceDisplay}`;
 
-    // กรณีเปิดผ่าน LINE App และ LIFF พร้อมใช้งาน
-    // กรณีเปิดผ่าน LINE App
-    if (isLiffReady && liff.isInClient()) {
-        // เช็คล็อกอินเฉพาะตอนกดส่งข้อมูล
+    const liffReady = await liffInitPromise;
+
+    if (liffReady && liff.isInClient()) {
         if (!liff.isLoggedIn()) {
             liff.login();
             return;
         }
-
         try {
             await liff.sendMessages([{ type: "text", text: messageText }]);
             alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
             liff.closeWindow();
         } catch (err) {
             console.error("sendMessages Error:", err);
-            // ถ้าส่งข้อความผ่าน LIFF ไม่ผ่าน ให้ใช้ระบบ Popup สำรอง
             showCopyPopup(messageText);
         }
     } else {
-        // กรณีเปิดนอก LINE App -> แสดง Popup คัดลอกข้อความ
         showCopyPopup(messageText);
     }
 }
 
-// 3. ฟังก์ชันสร้าง Popup สำหรับคัดลอกข้อความ (รองรับการเปิดผ่าน Chrome/Safari)
+// 4. ฟังก์ชันสร้าง Popup สำหรับคัดลอกข้อความ (รองรับการเปิดผ่าน Chrome/Safari)
 function showCopyPopup(message) {
     const popup = document.createElement('div');
     popup.className = 'message-popup';
@@ -101,8 +105,27 @@ function showCopyPopup(message) {
     };
 }
 
-// 4. ส่วนคำนวณราคาและระบบปุ่มบวกลบ
+// 5. เมื่อ DOM พร้อม: ผูกปุ่ม, ระบบคำนวณราคา, ระบบล็อกการ์ดจนกว่าเพจจะโหลดครบ
 document.addEventListener('DOMContentLoaded', () => {
+    // ----- สลับหน้า -----
+    const umrahLink = document.getElementById('umrah-link');
+    const backLink = document.getElementById('back-link');
+
+    umrahLink.addEventListener('click', showDetailPage);
+    backLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        showListPage();
+    });
+
+    // ล็อกการ์ดไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
+    umrahLink.style.pointerEvents = 'none';
+    umrahLink.style.opacity = '0.5';
+    window.addEventListener('load', () => {
+        umrahLink.style.pointerEvents = 'auto';
+        umrahLink.style.opacity = '1';
+    });
+
+    // ----- คำนวณราคาและระบบปุ่มบวกลบ -----
     const plusBtn = document.getElementById('btn-plus');
     const minusBtn = document.getElementById('btn-minus');
     const qtyInput = document.getElementById('qty-input');
