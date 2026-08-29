@@ -1,26 +1,30 @@
-// ตัวแปรระดับ Global สำหรับเก็บสถานะ LIFF
 let isLiffReady = false;
 let userProfile = null;
 const LIFF_ID = "2008429094-YTq3YOaG";
 
-// 1. เริ่มต้นโหลด LIFF ทันทีที่เปิดหน้าเว็บ
-// 1. เริ่มต้นโหลด LIFF ทันทีที่เปิดหน้าเว็บ (แบบไม่สั่ง Login ทันที)
 window.addEventListener('load', async () => {
     if (typeof liff === "undefined") {
         console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
         return;
     }
 
+    if (sessionStorage.getItem('liff_init_lock') === 'true') {
+        console.warn("ตรวจพบความเสี่ยง redirect loop - ข้ามการ init ซ้ำ");
+        return;
+    }
+    sessionStorage.setItem('liff_init_lock', 'true');
+
     try {
         await liff.init({ liffId: LIFF_ID });
-        isLiffReady = true; // กำหนดให้ LIFF พร้อมใช้งาน
+        isLiffReady = true;
 
-        // ดึงโปรไฟล์เฉพาะกรณีผู้ใช้ล็อกอินไว้อยู่แล้วเท่านั้น (ถ้ายังไม่ล็อกอิน ปล่อยผ่านไปก่อน)
         if (liff.isInClient() && liff.isLoggedIn()) {
             userProfile = await liff.getProfile();
         }
+        sessionStorage.removeItem('liff_init_lock');
     } catch (err) {
         console.error("LIFF Init Error:", err);
+        sessionStorage.removeItem('liff_init_lock');
     }
 });
 
