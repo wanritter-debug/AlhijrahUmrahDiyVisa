@@ -63,7 +63,7 @@ function submitBooking() {
         qty: document.getElementById("qty-input").value,
         hotelMakkah: document.getElementById("hotelMakkah").value,
         hotelMadinah: document.getElementById("hotelMadinah").value,
-        totalPrice: document.getElementById("price-display").innerText
+        totalPrice: document.getElementById("price-display").textContent.trim()
       };
 
       if (!formData.fullName || !formData.phone) {
