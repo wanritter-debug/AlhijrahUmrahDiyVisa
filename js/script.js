@@ -1,9 +1,8 @@
-// ฟังก์ชันส่งข้อมูลการจองผ่าน LIFF
+// ฟังก์ชันส่งข้อมูลการจองผ่าน LIFF (ใช้ liff.sendMessages ส่งข้อความเข้าห้องแชทโดยตรง)
 function submitBooking(event) {
   if (event) event.preventDefault(); // ป้องกันหน้าเว็บ Reload หรือเด้งกลับหน้าแรก
 
   const LIFF_ID = "2008429094-YTq3YOaG";
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnSgVoJjbVVJyiGGya93ZymSsYPJH3o5snYxtzuy2RdlKjWcq5pFOEtouaDM7GCGMy/exec";
 
   const fullName = document.getElementById("fullName").value.trim();
   const phone = document.getElementById("phone").value.trim();
@@ -13,7 +12,7 @@ function submitBooking(event) {
     return;
   }
 
-  // ตรวจสอบความพร้อมของ LIFF
+  // ตรวจสอบความพร้อมของ LIFF SDK
   if (typeof liff === "undefined") {
     alert("ไม่พบ LIFF SDK กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต");
     return;
@@ -21,31 +20,34 @@ function submitBooking(event) {
 
   liff.init({ liffId: LIFF_ID })
     .then(() => {
-      if (!liff.isLoggedIn() && !liff.isInClient()) {
+      // ตรวจสอบว่าเปิดผ่านแอป LINE หรือไม่ (liff.sendMessages ใช้ได้เฉพาะในแอป LINE เท่านั้น)
+      if (!liff.isInClient()) {
+        alert("กรุณาเปิดใช้งานและส่งข้อมูลผ่านแอปพลิเคชัน LINE เท่านั้น");
+        return;
+      }
+
+      if (!liff.isLoggedIn()) {
         liff.login();
         return;
       }
-      return liff.getProfile();
-    })
-    .then(profile => {
-      if (!profile) return;
 
-      const formData = {
-        userId: profile.userId,
-        fullName: fullName,
-        phone: phone,
-        qty: document.getElementById("qty-input").value,
-        hotelMakkah: document.getElementById("hotelMakkah").value,
-        hotelMadinah: document.getElementById("hotelMadinah").value,
-        totalPrice: document.getElementById("price-display").textContent.trim()
-      };
+      // จัดรูปแบบข้อความที่จะส่งลงในห้องแชท LINE
+      const messageText = `📌 รายการจองวีซ่าอุมเราะห์ใหม่\n` +
+        `-------------------------\n` +
+        `👤 ชื่อ-สกุล: ${fullName}\n` +
+        `📞 เบอร์โทร: ${phone}\n` +
+        `👥 จำนวน: ${document.getElementById("qty-input").value} ท่าน\n` +
+        `🏨 โรงแรมมักกะฮ์: ${document.getElementById("hotelMakkah").value || '-'}\n` +
+        `🏨 โรงแรมมาดีนะฮ์: ${document.getElementById("hotelMadinah").value || '-'}\n` +
+        `💰 ราคารวม: ${document.getElementById("price-display").textContent.trim()}`;
 
-return fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(formData)
-      });
+      // คำสั่งส่งข้อความเข้าห้องแชท
+      return liff.sendMessages([
+        {
+          type: "text",
+          text: messageText
+        }
+      ]);
     })
     .then(() => {
       alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
@@ -61,7 +63,7 @@ return fetch(WEB_APP_URL, {
     });
 }
 
-// ส่วนคำนวณราคาและระบบปุ่มบวกลบ (รวมไว้บล็อกเดียว)
+// ส่วนคำนวณราคาและระบบปุ่มบวกลบ
 document.addEventListener('DOMContentLoaded', () => {
   const plusBtn = document.getElementById('btn-plus');
   const minusBtn = document.getElementById('btn-minus');
