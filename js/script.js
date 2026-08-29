@@ -1,3 +1,4 @@
+// 1. ฟังก์ชันส่งข้อมูลการจอง (วางไว้นอกสุดด้านบน)
 function submitBooking() {
   const LIFF_ID = "2008429094-YTq3YOaG";
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnSgVoJjbVVJyiGGya93ZymSsYPJH3o5snYxtzuy2RdlKjWcq5pFOEtouaDM7GCGMy/exec";
@@ -36,7 +37,9 @@ function submitBooking() {
     alert("เกิดข้อผิดพลาดในการเชื่อมต่อ LINE");
   });
 }
-    document.addEventListener('DOMContentLoaded', () => {
+
+// 2. ฟังก์ชันคำนวณราคาและปุ่มบวกลบ (วางไว้ต่อท้ายด้านล่าง)
+document.addEventListener('DOMContentLoaded', () => {
     const plusBtn = document.getElementById('btn-plus');
     const minusBtn = document.getElementById('btn-minus');
     const qtyInput = document.getElementById('qty-input');
@@ -87,4 +90,3 @@ function submitBooking() {
         });
     }
 });
-
