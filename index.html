@@ -10,8 +10,60 @@
 
     <!-- โหลด LINE LIFF SDK เพียงจุดเดียว ใช้ทั้งเว็บ -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+    <style>
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.3s ease;
+        }
+        #loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loading-percent {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1b4b27;
+            margin-bottom: 8px;
+        }
+        .loading-bar-track {
+            width: 160px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .loading-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #1b4b27;
+            border-radius: 3px;
+            transition: width 0.2s ease;
+        }
+        .loading-label {
+            font-size: 13px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
+
+    <div id="loading-overlay">
+        <div class="loading-percent" id="loading-percent">0%</div>
+        <div class="loading-bar-track">
+            <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        </div>
+        <div class="loading-label">กำลังเตรียมระบบ...</div>
+    </div>
 
     <!-- ============ หน้า 1: รายการการ์ด ============ -->
     <div class="mobile-container" id="page-list">

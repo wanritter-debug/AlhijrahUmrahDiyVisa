@@ -120,10 +120,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // ล็อกการ์ดไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
     umrahLink.style.pointerEvents = 'none';
     umrahLink.style.opacity = '0.5';
-    window.addEventListener('load', () => {
+
+    // ----- แสดง % โหลดจากจำนวนรูปภาพจริง -----
+    const overlay = document.getElementById('loading-overlay');
+    const percentText = document.getElementById('loading-percent');
+    const barFill = document.getElementById('loading-bar-fill');
+
+    const images = Array.from(document.images); // นับรูปทั้งหมดในหน้า (ทั้งสอง section)
+    const total = images.length;
+    let loadedCount = 0;
+
+    function updateProgress() {
+        loadedCount++;
+        const percent = total > 0 ? Math.round((loadedCount / total) * 100) : 100;
+        percentText.textContent = percent + '%';
+        barFill.style.width = percent + '%';
+
+        if (loadedCount >= total) {
+            overlay.classList.add('hidden');
+            umrahLink.style.pointerEvents = 'auto';
+            umrahLink.style.opacity = '1';
+        }
+    }
+
+    if (total === 0) {
+        // ไม่มีรูปให้นับ ปลดล็อกทันที
+        overlay.classList.add('hidden');
         umrahLink.style.pointerEvents = 'auto';
         umrahLink.style.opacity = '1';
-    });
+    } else {
+        images.forEach((img) => {
+            if (img.complete) {
+                updateProgress();
+            } else {
+                img.addEventListener('load', updateProgress);
+                img.addEventListener('error', updateProgress); // นับรวมด้วยแม้โหลดพลาด กันค้าง 100% ไม่ถึง
+            }
+        });
+    }
 
     // ----- คำนวณราคาและระบบปุ่มบวกลบ -----
     const plusBtn = document.getElementById('btn-plus');
