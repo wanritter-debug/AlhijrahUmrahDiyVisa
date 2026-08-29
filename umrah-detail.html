@@ -6,6 +6,8 @@
     <title>อุมเราะห์วีซ่า</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- โหลด LINE LIFF SDK (เพิ่มเข้ามาใหม่) -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
     <div class="mobile-container detail-container">
@@ -39,23 +41,23 @@
             </ul>
         </div>
 
-        <!-- ฟิลด์ ชื่อ-สกุล ผู้ติดต่อ -->
+        <!-- ฟิลด์ ชื่อ-สกุล ผู้ติดต่อ (เพิ่ม id="fullName") -->
         <div class="form-group">
             <label>ชื่อ-สกุล ผู้ติดต่อ</label>
             <div class="input-text">
-                <input type="text" placeholder="">
+                <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล">
             </div>
         </div>
 
-        <!-- ฟิลด์ เบอร์โทรศัพท์ -->
+        <!-- ฟิลด์ เบอร์โทรศัพท์ (เพิ่ม id="phone") -->
         <div class="form-group">
             <label>เบอร์โทรศัพท์</label>
             <div class="input-text">
-                <input type="tel" placeholder="">
+                <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์">
             </div>
         </div>
 
-        <!-- Quantity Counter (เพิ่ม id สำหรับสคริปต์) -->
+        <!-- Quantity Counter -->
         <div class="form-group">
             <label>จำนวน</label>
             <div class="counter-control">
@@ -65,11 +67,11 @@
             </div>
         </div>
 
-        <!-- Form Elements (เลือกโรงแรม) -->
+        <!-- Form Elements (เพิ่ม id="hotelMakkah" และ id="hotelMadinah") -->
         <div class="form-group">
             <label>เลือกชื่อโรงแรมมักกะฮ์</label>
             <div class="input-search">
-                <input type="text" placeholder="">
+                <input type="text" id="hotelMakkah" placeholder="ระบุโรงแรมมักกะฮ์">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
@@ -77,73 +79,28 @@
         <div class="form-group">
             <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
             <div class="input-search">
-                <input type="text" placeholder="">
+                <input type="text" id="hotelMadinah" placeholder="ระบุโรงแรมมาดีนะฮ์">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
 
-            <!-- Price Display -->
+        <!-- Price Display -->
         <div class="form-group">
             <label>ราคา</label>
             <div class="price-box" id="price-display">6,500 บาท</div>
             
-            <!-- ข้อความโปรโมชันส่วนลด (เพิ่มใหม่) -->
             <div class="discount-badge" id="discount-badge">
                 🔥 เดินทาง 6 ท่านขึ้นไป ลดสูงสุด 15%!
             </div>
         </div>
 
-        <!-- Submit Button -->
-        <button class="btn-submit">ดำเนินการ</button>
+        <!-- Submit Button (เพิ่ม onclick="submitBooking()") -->
+        <button class="btn-submit" onclick="submitBooking()">ดำเนินการ</button>
     </div>
 
-    <!-- ดึงไฟล์ JS แยกเข้ามาใช้งาน -->
     <script src="js/script.js"></script>
 
-    <script>
-      function submitBooking() {
-        const LIFF_ID = "2008429094-YTq3YOaG";
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnSgVoJjbVVJyiGGya93ZymSsYPJH3o5snYxtzuy2RdlKjWcq5pFOEtouaDM7GCGMy/exec";
-
-        liff.init({ liffId: LIFF_ID }).then(() => {
-          // ดึงข้อมูลจากช่องกรอก
-          const formData = {
-            replyToken: liff.getContext() ? liff.getContext().replyToken : null,
-            fullName: document.getElementById("fullName").value,
-            phone: document.getElementById("phone").value,
-            qty: document.getElementById("qty-input").value,
-            hotelMakkah: document.getElementById("hotelMakkah").value,
-            hotelMadinah: document.getElementById("hotelMadinah").value,
-            totalPrice: document.getElementById("price-display").innerText
-          };
-
-          // ตรวจสอบข้อมูลก่อนส่ง
-          if (!formData.fullName || !formData.phone) {
-            alert("กรุณากรอกชื่อ-สกุล และเบอร์โทรศัพท์ให้ครบถ้วน");
-            return;
-          }
-
-          // ยิงข้อมูลไปหา Google Apps Script
-          fetch(WEB_APP_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify(formData)
-          })
-          .then(res => res.json())
-          .then(data => {
-            alert("ส่งข้อมูลการจองเรียบร้อยแล้ว");
-            liff.closeWindow(); // ปิดหน้าต่าง LIFF
-          })
-          .catch(err => {
-            console.error(err);
-            alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
-          });
-
-        }).catch(err => {
-          console.error("LIFF Error: ", err);
-        });
-      }
-    </script>
 
 </body>
 </html>
+
