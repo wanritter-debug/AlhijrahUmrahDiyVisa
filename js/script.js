@@ -65,7 +65,6 @@ async function submitBooking(event) {
         try {
             await liff.sendMessages([{ type: "text", text: messageText }]);
             showSuccessPopup();
-            liff.closeWindow();
         } catch (err) {
             console.error("sendMessages Error:", err);
             showCopyPopup(messageText);
