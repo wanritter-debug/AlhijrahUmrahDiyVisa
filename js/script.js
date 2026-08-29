@@ -2,7 +2,8 @@ let isLiffReady = false;
 let userProfile = null;
 const LIFF_ID = "2008429094-YTq3YOaG";
 
-window.addEventListener('load', async () => {
+// ทำงานทันที ไม่ต้องรอ window 'load' (กันปัญหาเน็ตช้า/รูปโหลดช้า)
+(async () => {
     if (typeof liff === "undefined") {
         console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
         return;
@@ -18,7 +19,7 @@ window.addEventListener('load', async () => {
     } catch (err) {
         console.error("LIFF Init Error:", err);
     }
-});
+})();
 
 // 2. ฟังก์ชันส่งข้อมูลการจอง
 async function submitBooking(event) {

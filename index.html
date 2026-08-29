@@ -9,7 +9,6 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
     <style>
-        /* ม่านโหลดคลุมหน้าจอ ป้องกันผู้ใช้กดลิงก์ก่อน liff.init() จะเสร็จ */
         #liff-loading-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -46,14 +45,12 @@
 </head>
 <body>
 
-    <!-- Overlay กันกดก่อนพร้อม -->
     <div id="liff-loading-overlay">
         <div class="liff-spinner"></div>
         <p>กำลังเตรียมระบบ...</p>
     </div>
 
     <div class="mobile-container">
-        <!-- Header Section -->
         <header class="header-bar">
             <div class="logo">
                 <img src="img/logo-with-text white 1.svg" alt="ALHURAH LTD PART.">
@@ -61,9 +58,7 @@
             <div class="header-title">วีซ่า ซาอุดิอาระเบีย</div>
         </header>
 
-        <!-- Main Content Section -->
         <main class="card-list">
-            <!-- Card 1: วีซ่าอุมเราะห์ -->
             <a href="umrah-detail.html" id="umrah-link" style="text-decoration: none; display: block; color: inherit;">
                 <div class="card">
                     <img src="img/Group 11.svg" alt="วีซ่าอุมเราะห์" class="card-img">
@@ -73,7 +68,6 @@
                 </div>
             </a>
 
-            <!-- Card 2: วีซ่าท่องเที่ยว -->
             <div class="card">
                 <img src="img/Group 12.svg" alt="วีซ่าท่องเที่ยว" class="card-img">
                 <div class="card-overlay">
@@ -86,22 +80,20 @@
     <script>
         const LIFF_ID = "2008429094-YTq3YOaG";
         const overlay = document.getElementById('liff-loading-overlay');
-        const umrahLink = document.getElementById('umrah-link');
 
-        // ปิดม่านโหลด (เรียกได้จากทุกเส้นทาง: สำเร็จ, error, หรือ timeout)
         function unlockPage(reason) {
-            if (overlay.classList.contains('hidden')) return; // กันเรียกซ้ำ
+            if (overlay.classList.contains('hidden')) return;
             overlay.classList.add('hidden');
             console.log("ปลดล็อกหน้าเว็บ เหตุผล:", reason);
         }
 
-        // กันไม่ให้ค้างตลอดไปถ้าเน็ตแย่มาก - รอสูงสุด 8 วินาทีแล้วปล่อยผ่านแม้ init ไม่เสร็จ
         const FAILSAFE_MS = 8000;
         const failsafeTimer = setTimeout(() => {
             unlockPage("timeout - เน็ตช้าหรือ liff.init() ค้าง");
         }, FAILSAFE_MS);
 
-        window.addEventListener('load', async () => {
+        // ทำงานทันที ไม่ต้องรอ window 'load' (ซึ่งรอรูปภาพโหลดเสร็จหมดก่อน)
+        (async () => {
             if (typeof liff === "undefined") {
                 console.warn("ไม่พบ LIFF SDK - ระบบจะทำงานในรูปแบบ Standalone Web");
                 clearTimeout(failsafeTimer);
@@ -113,12 +105,11 @@
                 console.log("LIFF init สำเร็จที่หน้าแรก");
             } catch (err) {
                 console.error("LIFF Init Error (index.html):", err);
-                // แม้ init พลาด ก็ยังปล่อยให้ผู้ใช้กดต่อได้ (หน้า 2 จะมี fallback popup รองรับอยู่แล้ว)
             } finally {
                 clearTimeout(failsafeTimer);
                 unlockPage("liff.init() เสร็จสิ้น (สำเร็จหรือ error ก็ตาม)");
             }
-        });
+        })();
     </script>
 
 </body>
