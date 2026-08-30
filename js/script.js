@@ -111,7 +111,7 @@ function showSuccessPopup() {
 
     popup.innerHTML = `
         <div style="background:#fff;padding:32px 28px 24px;border-radius:24px;max-width:85%;width:300px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.15);">
-            <img src="img/check-circle_1.svg" alt="สำเร็จ" style="width:72px;height:72px;margin-bottom:16px;">
+            <img src="img/check-circle 1.svg" alt="สำเร็จ" style="width:72px;height:72px;margin-bottom:16px;">
             <div style="font-size:14px;color:#333;line-height:1.6;margin-bottom:20px;">
                 ส่งข้อมูลเรียบร้อยแล้วค่ะ<br>
                 เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด
