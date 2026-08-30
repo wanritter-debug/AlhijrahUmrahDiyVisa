@@ -146,18 +146,39 @@
 
             <div class="form-group">
                 <label>เลือกชื่อโรงแรมมักกะฮ์</label>
+                <select id="makkahStarFilter" style="width:100%;height:36px;border-radius:20px;border:none;background:#f2f2f2;padding:0 12px;margin-bottom:6px;">
+                    <option value="all">ทุกระดับดาว</option>
+                    <option value="0">ไม่มีดาว</option>
+                    <option value="1">1 ดาว</option>
+                    <option value="2">2 ดาว</option>
+                    <option value="3">3 ดาว</option>
+                    <option value="4">4 ดาว</option>
+                    <option value="5">5 ดาว</option>
+                </select>
                 <div class="input-search">
-                    <input type="text" id="hotelMakkah" placeholder="ระบุโรงแรมมักกะฮ์">
+                    <input type="text" id="hotelMakkah" list="makkah-hotels" placeholder="พิมพ์หรือเลือกโรงแรมมักกะฮ์">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
+                    <datalist id="makkah-hotels"></datalist>
             </div>
 
             <div class="form-group">
                 <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
+                    <select id="madinahStarFilter" style="width:100%;height:36px;border-radius:20px;border:none;background:#f2f2f2;padding:0 12px;margin-bottom:6px;">
+                        <option value="all">ทุกระดับดาว</option>
+                        <option value="0">ไม่มีดาว</option>
+                        <option value="1">1 ดาว</option>
+                        <option value="2">2 ดาว</option>
+                        <option value="3">3 ดาว</option>
+                        <option value="4">4 ดาว</option>
+                        <option value="5">5 ดาว</option>
+                    </select>
                 <div class="input-search">
-                    <input type="text" id="hotelMadinah" placeholder="ระบุโรงแรมมาดีนะฮ์">
+                    <input type="text" id="hotelMadinah" list="madinah-hotels" placeholder="พิมพ์หรือเลือกโรงแรมมาดีนะฮ์">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
+                <datalist id="madinah-hotels"></datalist>
+
             </div>
 
             <div class="form-group">
