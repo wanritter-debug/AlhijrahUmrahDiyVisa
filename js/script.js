@@ -40,20 +40,68 @@ async function submitBooking(event) {
     const hotelMakkah = document.getElementById("hotelMakkah").value.trim() || '-';
     const hotelMadinah = document.getElementById("hotelMadinah").value.trim() || '-';
     const priceDisplay = document.getElementById("price-display").textContent.trim();
+     // เคลียร์ข้อความเตือนเก่าก่อนเช็คใหม่ทุกครั้ง
+    ["fullName", "phone", "hotelMakkah", "hotelMadinah"].forEach(id => {
+        document.getElementById("err-" + id).textContent = "";
+    });
 
-    if (!fullName || !phone || !hotelMakkah || hotelMakkah === '-' || !hotelMadinah || hotelMadinah === '-') {
-    alert("กรุณากรอกชื่อ-สกุล เบอร์โทรศัพท์ และเลือกโรงแรมทั้งมักกะฮ์และมาดีนะฮ์ให้ครบถ้วน");
-    return;
+    let hasError = false;
+    if (!fullName) {
+        document.getElementById("err-fullName").textContent = "กรุณากรอกชื่อ-สกุล";
+        hasError = true;
+    }
+    if (!phone) {
+        document.getElementById("err-phone").textContent = "กรุณากรอกเบอร์โทรศัพท์";
+        hasError = true;
+    }
+    if (!hotelMakkah || hotelMakkah === '-') {
+        document.getElementById("err-hotelMakkah").textContent = "กรุณาเลือกโรงแรมมักกะฮ์";
+        hasError = true;
+    }
+    if (!hotelMadinah || hotelMadinah === '-') {
+        document.getElementById("err-hotelMadinah").textContent = "กรุณาเลือกโรงแรมมาดีนะฮ์";
+        hasError = true;
     }
 
-    const messageText = `📌 รายการจองวีซ่าอุมเราะห์ใหม่\n` +
-        `-------------------------\n` +
-        `👤 ชื่อ-สกุล: ${fullName}\n` +
-        `📞 เบอร์โทร: ${phone}\n` +
-        `👥 จำนวน: ${qty} ท่าน\n` +
-        `🏨 โรงแรมมักกะฮ์: ${hotelMakkah}\n` +
-        `🏨 โรงแรมมาดีนะฮ์: ${hotelMadinah}\n` +
-        `💰 ราคารวม: ${priceDisplay}`;
+    if (hasError) return;
+
+    const now = new Date();
+const bookingId = 'UMR' + now.getFullYear().toString().slice(-2) +
+    String(now.getMonth() + 1).padStart(2, '0') +
+    String(now.getDate()).padStart(2, '0') + '-' +
+    String(Math.floor(Math.random() * 9000) + 1000);
+
+const bookingDate = now.toLocaleDateString('th-TH', {
+    day: 'numeric', month: 'long', year: 'numeric'
+});
+const bookingTime = now.toLocaleTimeString('th-TH', {
+    hour: '2-digit', minute: '2-digit'
+});
+
+const pricePerPerson = (parseInt(qty) > 0)
+    ? Math.round(parseInt(priceDisplay.replace(/[^\d]/g, '')) / parseInt(qty)).toLocaleString()
+    : '';
+
+const messageText =
+    `🕋 ALHURAH LTD PART.\n` +
+    `📌 ใบยืนยันการจองวีซ่าอุมเราะห์\n` +
+    `เลขที่จอง: ${bookingId}\n` +
+    `วันที่จอง: ${bookingDate} เวลา ${bookingTime} น.\n` +
+    `═══════════════════\n` +
+    `👤 ข้อมูลผู้จอง\n` +
+    `ชื่อ-สกุล: ${fullName}\n` +
+    `เบอร์โทร: ${phone}\n` +
+    `จำนวนผู้เดินทาง: ${qty} ท่าน\n` +
+    `═══════════════════\n` +
+    `🏨 ที่พัก\n` +
+    `มักกะฮ์: ${hotelMakkah}\n` +
+    `มาดีนะฮ์: ${hotelMadinah}\n` +
+    `═══════════════════\n` +
+    `💰 ค่าใช้จ่าย\n` +
+    `ราคาต่อท่าน: ${pricePerPerson} บาท\n` +
+    `ราคารวมทั้งหมด: ${priceDisplay}\n` +
+    `═══════════════════\n` +
+    `เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันการจองภายใน 24 ชม.`;
 
     const liffReady = await liffInitPromise;
 

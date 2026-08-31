@@ -466,3 +466,10 @@ body {
     vertical-align: middle;
     margin: 0 1px;
 }
+
+.field-error {
+    font-size: 11px;
+    color: #d32f2f;
+    min-height: 14px;
+    display: block;
+}
