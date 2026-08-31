@@ -83,21 +83,16 @@ const pricePerPerson = (parseInt(qty) > 0)
     : '';
 
 const messageText =
-    `🕋 ALHURAH LTD PART.\n` +
-    `📌 ใบยืนยันการจองวีซ่าอุมเราะห์\n` +
+    `ข้อความการจองวีซ่าอุมเราะห์\n` +
     `เลขที่จอง: ${bookingId}\n` +
-    `วันที่จอง: ${bookingDate} เวลา ${bookingTime} น.\n` +
     `═══════════════════\n` +
-    `👤 ข้อมูลผู้จอง\n` +
     `ชื่อ-สกุล: ${fullName}\n` +
     `เบอร์โทร: ${phone}\n` +
     `จำนวนผู้เดินทาง: ${qty} ท่าน\n` +
     `═══════════════════\n` +
-    `🏨 ที่พัก\n` +
-    `มักกะฮ์: ${hotelMakkah}\n` +
-    `มาดีนะฮ์: ${hotelMadinah}\n` +
+    `ที่พักมักกะห์: ${hotelMakkah}\n` +
+    `ที่พักมาดีนะห์: ${hotelMadinah}\n` +
     `═══════════════════\n` +
-    `💰 ค่าใช้จ่าย\n` +
     `ราคาต่อท่าน: ${pricePerPerson} บาท\n` +
     `ราคารวมทั้งหมด: ${priceDisplay}\n` +
     `═══════════════════\n` +
@@ -130,11 +125,11 @@ function showCopyPopup(message) {
 
     popup.innerHTML = `
         <div style="background:#fff;padding:20px;border-radius:10px;max-width:90%;width:400px;text-align:center;">
-            <h3 style="margin-top:0;">📋 สำเร็จการกรอกข้อมูล</h3>
+            <h3 style="margin-top:0;">สำเร็จการกรอกข้อมูล</h3>
             <p style="font-size:13px;color:#666;">กรุณาคัดลอกข้อความด้านล่างเพื่อส่งไปยัง LINE Chat</p>
             <textarea readonly style="width:100%;height:180px;margin:10px 0;padding:8px;border:1px solid #ccc;border-radius:5px;resize:none;font-size:13px;">${message}</textarea>
             <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;">
-                <button id="copyBtn" style="padding:10px 15px;background:#00b900;color:#fff;border:none;border-radius:5px;cursor:pointer;">📋 คัดลอกข้อความ</button>
+                <button id="copyBtn" style="padding:10px 15px;background:#00b900;color:#fff;border:none;border-radius:5px;cursor:pointer;">คัดลอกข้อความ</button>
                 <button onclick="this.closest('.message-popup').remove()" style="padding:10px 15px;background:#666;color:#fff;border:none;border-radius:5px;cursor:pointer;">ปิด</button>
             </div>
         </div>
