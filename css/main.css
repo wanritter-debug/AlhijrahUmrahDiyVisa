@@ -354,3 +354,115 @@ body {
     margin-top: 4px;
     transition: all 0.3s ease;
 }
+
+/* ===== Hotel Picker Modal ===== */
+.hotel-picker-card {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 320px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* หน้าเลือกหมวดดาว (ตามภาพที่ 1: การ์ดไล่สีเขียว) */
+.hotel-picker-category-card {
+    background: linear-gradient(180deg, #7FD085 0%, #1b4b27 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hotel-picker-row-category {
+    background: #f5f5f0;
+    border-radius: 20px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s ease;
+}
+
+.hotel-picker-row-category:active {
+    transform: scale(0.97);
+}
+
+/* หน้าค้นหาโรงแรม (ตามภาพที่ 2) */
+.hotel-picker-search-card {
+    background: #ffffff;
+}
+
+.hotel-picker-search-title {
+    text-align: center;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.hotel-picker-search-box {
+    position: relative;
+    background: #1b4b27;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.hotel-picker-search-box input {
+    width: 100%;
+    height: 40px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 0 40px 0 16px;
+    font-size: 13px;
+}
+
+.hotel-picker-search-box input::placeholder {
+    color: #d1e7dd;
+}
+
+.hotel-picker-search-box i {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+}
+
+.hotel-picker-results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.hotel-picker-row {
+    background: #f2f2f2;
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+}
+
+.hotel-picker-row:active {
+    background: #e5e5e5;
+}
+
+.hotel-picker-empty {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    padding: 20px 0;
+}
+
+.hotel-picker-star {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin: 0 1px;
+}

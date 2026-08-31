@@ -116,13 +116,13 @@
                 <li>2.1 พาสปอร์ตที่มีอายุมากกว่า 6 เดือน นับจากวันที่เดินทาง</li>
                 <li>2.2 สำเนาหน้าพาสปอร์ต</li>
                 <li>2.3 รูปถ่ายพื้นหลังสีขาว</li>
-                <li>2.4 การยืนยันจากทางที่พักมักกะฮ์และเมดิฮะฮ์ โดยที่พักจะต้องอยู่ในระบบ</li>
+                <li>2.4 การยืนยันจากทางที่พักมักกะห์และมาดีนะห์ โดยที่พักจะต้องอยู่ในระบบ</li>
             </ul>
         </div>
 
         <form id="bookingForm" onsubmit="event.preventDefault(); submitBooking(event);">
             <div class="form-group">
-                <label>ชื่อ-สกุล ผู้ติดต่อ</label>
+                <label>ชื่อ-สกุล</label>
                 <div class="input-text">
                     <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
                 </div>
@@ -145,40 +145,20 @@
             </div>
 
             <div class="form-group">
-                <label>เลือกชื่อโรงแรมมักกะฮ์</label>
-                <select id="makkahStarFilter" style="width:100%;height:36px;border-radius:20px;border:none;background:#f2f2f2;padding:0 12px;margin-bottom:6px;">
-                    <option value="all">ทุกระดับดาว</option>
-                    <option value="0">ไม่มีดาว</option>
-                    <option value="1">1 ดาว</option>
-                    <option value="2">2 ดาว</option>
-                    <option value="3">3 ดาว</option>
-                    <option value="4">4 ดาว</option>
-                    <option value="5">5 ดาว</option>
-                </select>
-                <div class="input-search">
-                    <input type="text" id="hotelMakkah" list="makkah-hotels" placeholder="พิมพ์หรือเลือกโรงแรมมักกะฮ์">
+                <label>เลือกชื่อโรงแรมมักกะห์</label>
+                <div class="input-search" id="makkahPickerTrigger" style="cursor:pointer;">
+                    <input type="text" id="hotelMakkah" placeholder="แตะเพื่อเลือกโรงแรมมักกะห์" readonly style="cursor:pointer;">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
-                    <datalist id="makkah-hotels"></datalist>
             </div>
+                    
 
             <div class="form-group">
-                <label>เลือกชื่อโรงแรมมาดีนะฮ์</label>
-                    <select id="madinahStarFilter" style="width:100%;height:36px;border-radius:20px;border:none;background:#f2f2f2;padding:0 12px;margin-bottom:6px;">
-                        <option value="all">ทุกระดับดาว</option>
-                        <option value="0">ไม่มีดาว</option>
-                        <option value="1">1 ดาว</option>
-                        <option value="2">2 ดาว</option>
-                        <option value="3">3 ดาว</option>
-                        <option value="4">4 ดาว</option>
-                        <option value="5">5 ดาว</option>
-                    </select>
-                <div class="input-search">
-                    <input type="text" id="hotelMadinah" list="madinah-hotels" placeholder="พิมพ์หรือเลือกโรงแรมมาดีนะฮ์">
+                <label>เลือกชื่อโรงแรมมาดีนะห์</label>
+                <div class="input-search" id="madinahPickerTrigger" style="cursor:pointer;">
+                    <input type="text" id="hotelMadinah" placeholder="แตะเพื่อเลือกโรงแรมมาดีนะห์" readonly style="cursor:pointer;">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
-                <datalist id="madinah-hotels"></datalist>
-
             </div>
 
             <div class="form-group">

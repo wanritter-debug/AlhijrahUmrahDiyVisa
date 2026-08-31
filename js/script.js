@@ -41,9 +41,9 @@ async function submitBooking(event) {
     const hotelMadinah = document.getElementById("hotelMadinah").value.trim() || '-';
     const priceDisplay = document.getElementById("price-display").textContent.trim();
 
-    if (!fullName || !phone) {
-        alert("กรุณากรอกชื่อ-สกุล และเบอร์โทรศัพท์ให้ครบถ้วน");
-        return;
+    if (!fullName || !phone || !hotelMakkah || hotelMakkah === '-' || !hotelMadinah || hotelMadinah === '-') {
+    alert("กรุณากรอกชื่อ-สกุล เบอร์โทรศัพท์ และเลือกโรงแรมทั้งมักกะฮ์และมาดีนะฮ์ให้ครบถ้วน");
+    return;
     }
 
     const messageText = `📌 รายการจองวีซ่าอุมเราะห์ใหม่\n` +
@@ -1125,21 +1125,113 @@ const madinahHotels = [
     // ใส่รายชื่อโรงแรมมาดีนะฮ์แบบเดียวกัน { name, stars }
 ];
 
-function renderHotelOptions(hotelList, datalistId, starValue) {
-    const datalist = document.getElementById(datalistId);
-    datalist.innerHTML = '';
-    const filtered = starValue === 'all'
-        ? hotelList
-        : hotelList.filter(h => h.stars === parseInt(starValue));
-    filtered.forEach(h => {
-        const opt = document.createElement('option');
-        opt.value = h.name;
-        datalist.appendChild(opt);
+const STAR_CATEGORIES = [
+    { value: 'all', text: 'โรงแรมทุกระดับดาว', starCount: 0 },
+    { value: '0', text: 'โรงแรมที่ยังไม่มีการกำหนดจำนวนดาว', starCount: 0 },
+    { value: '1', text: 'โรงแรม', starCount: 1 },
+    { value: '2', text: 'โรงแรม', starCount: 2 },
+    { value: '3', text: 'โรงแรม', starCount: 3 },
+    { value: '4', text: 'โรงแรม', starCount: 4 },
+    { value: '5', text: 'โรงแรม', starCount: 5 }
+];
+
+function closeHotelPicker() {
+    const existing = document.getElementById('hotelPickerModal');
+    if (existing) existing.remove();
+}
+
+function openHotelPicker(type) {
+    renderCategoryStep(type);
+}
+
+function renderCategoryStep(type) {
+    closeHotelPicker();
+    const modal = document.createElement('div');
+    modal.id = 'hotelPickerModal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;align-items:center;z-index:9999;padding:20px;';
+
+    const rows = STAR_CATEGORIES.map(item => {
+        const starsHtml = item.starCount > 0
+            ? Array(item.starCount).fill('<img src="img/star 1.svg" alt="star" class="hotel-picker-star">').join('')
+            : '';
+        return `<div class="hotel-picker-row hotel-picker-row-category" data-value="${item.value}">${item.text} ${starsHtml}</div>`;
+    }).join('');;
+
+    modal.innerHTML = `<div class="hotel-picker-card hotel-picker-category-card">${rows}</div>`;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeHotelPicker();
+    });
+
+    modal.querySelectorAll('.hotel-picker-row-category').forEach(row => {
+        row.addEventListener('click', () => {
+            renderSearchStep(type, row.getAttribute('data-value'));
+        });
     });
 }
 
-// 5. เมื่อ DOM พร้อม: ผูกปุ่ม, ระบบคำนวณราคา, ระบบล็อกการ์ดจนกว่าเพจจะโหลดครบ
-document.addEventListener('DOMContentLoaded', () => {
+function renderSearchStep(type, starValue) {
+    closeHotelPicker();
+    const hotelList = type === 'makkah' ? makkahHotels : madinahHotels;
+    const filtered = starValue === 'all'
+        ? hotelList
+        : hotelList.filter(h => h.stars === parseInt(starValue));
+
+    const modal = document.createElement('div');
+    modal.id = 'hotelPickerModal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;align-items:center;z-index:9999;padding:20px;';
+
+    const cityLabel = type === 'makkah' ? 'มักกะฮ์' : 'มาดีนะฮ์';
+
+    modal.innerHTML = `
+        <div class="hotel-picker-card hotel-picker-search-card">
+            <div class="hotel-picker-search-title">ค้นหาชื่อโรงแรม${cityLabel}</div>
+            <div class="hotel-picker-search-box">
+                <input type="text" id="hotelPickerSearchInput" placeholder="พิมพ์ชื่อโรงแรม">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div id="hotelPickerResults" class="hotel-picker-results"></div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeHotelPicker();
+    });
+
+    function renderResults(list) {
+        const container = document.getElementById('hotelPickerResults');
+        if (list.length === 0) {
+            container.innerHTML = '<div class="hotel-picker-empty">ไม่พบโรงแรมที่ค้นหา</div>';
+            return;
+        }
+        container.innerHTML = list.map(h =>
+            `<div class="hotel-picker-row" data-name="${h.name}">${h.name}</div>`
+        ).join('');
+        container.querySelectorAll('.hotel-picker-row').forEach(row => {
+            row.addEventListener('click', () => {
+                selectHotel(type, row.getAttribute('data-name'));
+            });
+        });
+    }
+
+    renderResults(filtered);
+
+    document.getElementById('hotelPickerSearchInput').addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        renderResults(filtered.filter(h => h.name.toLowerCase().includes(q)));
+    });
+}
+
+function selectHotel(type, name) {
+    const inputId = type === 'makkah' ? 'hotelMakkah' : 'hotelMadinah';
+    document.getElementById(inputId).value = name;
+    closeHotelPicker();
+}
+
+    // 5. เมื่อ DOM พร้อม: ผูกปุ่ม, ระบบคำนวณราคา, ระบบล็อกการ์ดจนกว่าเพจจะโหลดครบ
+    document.addEventListener('DOMContentLoaded', () => {
     // ----- สลับหน้า -----
     const umrahLink = document.getElementById('umrah-link');
     const backLink = document.getElementById('back-link');
@@ -1150,18 +1242,8 @@ document.addEventListener('DOMContentLoaded', () => {
         showListPage();
     });
         // ----- ฟิลเตอร์โรงแรมตามดาว -----
-    const makkahFilter = document.getElementById('makkahStarFilter');
-    const madinahFilter = document.getElementById('madinahStarFilter');
-
-    renderHotelOptions(makkahHotels, 'makkah-hotels', 'all');
-    renderHotelOptions(madinahHotels, 'madinah-hotels', 'all');
-
-    makkahFilter.addEventListener('change', () => {
-        renderHotelOptions(makkahHotels, 'makkah-hotels', makkahFilter.value);
-    });
-    madinahFilter.addEventListener('change', () => {
-        renderHotelOptions(madinahHotels, 'madinah-hotels', madinahFilter.value);
-    });
+    document.getElementById('makkahPickerTrigger').addEventListener('click', () => openHotelPicker('makkah'));
+    document.getElementById('madinahPickerTrigger').addEventListener('click', () => openHotelPicker('madinah'));
 
     // ล็อกการ์ดไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
     umrahLink.style.pointerEvents = 'none';
