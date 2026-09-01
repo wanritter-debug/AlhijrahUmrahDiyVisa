@@ -19,16 +19,22 @@ let liffInitPromise = (async () => {
     }
 })();
 
-// 2. ฟังก์ชันสลับหน้า (แทนการเปลี่ยนไฟล์ html)
 function showDetailPage() {
     document.getElementById('page-list').style.display = 'none';
     document.getElementById('page-detail').style.display = 'flex';
 }
 
+function showTourismDetailPage() {
+    document.getElementById('page-list').style.display = 'none';
+    document.getElementById('page-detail-tourism').style.display = 'flex';
+}
+
 function showListPage() {
     document.getElementById('page-detail').style.display = 'none';
+    document.getElementById('page-detail-tourism').style.display = 'none';
     document.getElementById('page-list').style.display = 'flex';
 }
+
 
 // 3. ฟังก์ชันส่งข้อมูลการจอง
 async function submitBooking(event) {
@@ -116,6 +122,72 @@ const messageText =
         showCopyPopup(messageText);
     }
 }
+
+async function submitBookingTourism(event) {
+    if (event) event.preventDefault();
+
+    const fullName = document.getElementById("fullNameTourism").value.trim();
+    const phone = document.getElementById("phoneTourism").value.trim();
+    const qty = document.getElementById("qty-input-tourism").value;
+    const priceDisplay = document.getElementById("price-display-tourism").textContent.trim();
+
+    ["fullNameTourism", "phoneTourism"].forEach(id => {
+        document.getElementById("err-" + id).textContent = "";
+    });
+
+    let hasError = false;
+    if (!fullName) {
+        document.getElementById("err-fullNameTourism").textContent = "กรุณากรอกชื่อ-สกุล";
+        hasError = true;
+    }
+    if (!phone) {
+        document.getElementById("err-phoneTourism").textContent = "กรุณากรอกเบอร์โทรศัพท์";
+        hasError = true;
+    }
+    if (hasError) return;
+
+    const now = new Date();
+    const bookingId = 'TUR' + now.getFullYear().toString().slice(-2) +
+        String(now.getMonth() + 1).padStart(2, '0') +
+        String(now.getDate()).padStart(2, '0') + '-' +
+        String(Math.floor(Math.random() * 9000) + 1000);
+
+    const pricePerPerson = (parseInt(qty) > 0)
+        ? Math.round(parseInt(priceDisplay.replace(/[^\d]/g, '')) / parseInt(qty)).toLocaleString()
+        : '';
+
+    const messageText =
+        `ข้อความการจองวีซ่าท่องเที่ยว\n` +
+        `เลขที่จอง: ${bookingId}\n` +
+        `═══════════════════\n` +
+        `ชื่อ-สกุล: ${fullName}\n` +
+        `เบอร์โทร: ${phone}\n` +
+        `จำนวนผู้เดินทาง: ${qty} ท่าน\n` +
+        `═══════════════════\n` +
+        `ราคาต่อท่าน: ${pricePerPerson} บาท\n` +
+        `ราคารวมทั้งหมด: ${priceDisplay}\n` +
+        `═══════════════════\n` +
+        `เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันการจองภายใน 24 ชม.`;
+
+    const liffReady = await liffInitPromise;
+
+    if (liffReady && liff.isInClient()) {
+        if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+        }
+        try {
+            await liff.sendMessages([{ type: "text", text: messageText }]);
+            showSuccessPopup();
+        } catch (err) {
+            console.error("sendMessages Error:", err);
+            showCopyPopup(messageText);
+        }
+    } else {
+        showCopyPopup(messageText);
+    }
+}
+
 
 // 4. ฟังก์ชันสร้าง Popup สำหรับคัดลอกข้อความ (รองรับการเปิดผ่าน Chrome/Safari)
 function showCopyPopup(message) {
@@ -1289,6 +1361,16 @@ function selectHotel(type, name) {
         e.preventDefault();
         showListPage();
     });
+
+    const tourismLink = document.getElementById('tourism-link');
+    const backLinkTourism = document.getElementById('back-link-tourism');
+
+    tourismLink.addEventListener('click', showTourismDetailPage);
+    backLinkTourism.addEventListener('click', (e) => {
+        e.preventDefault();
+        showListPage();
+    });
+
         // ----- ฟิลเตอร์โรงแรมตามดาว -----
     document.getElementById('makkahPickerTrigger').addEventListener('click', () => openHotelPicker('makkah'));
     document.getElementById('madinahPickerTrigger').addEventListener('click', () => openHotelPicker('madinah'));
@@ -1388,4 +1470,41 @@ function selectHotel(type, name) {
             updatePrice();
         });
     }
+
+
+    const plusBtnTourism = document.getElementById('btn-plus-tourism');
+    const minusBtnTourism = document.getElementById('btn-minus-tourism');
+    const qtyInputTourism = document.getElementById('qty-input-tourism');
+    const priceDisplayTourism = document.getElementById('price-display-tourism');
+
+
+    function updatePriceTourism() {
+        let qty = parseInt(qtyInputTourism.value) || 1;
+        let pricePerPerson = 5900; // ราคาฐานวีซ่าท่องเที่ยว
+        let totalPrice = qty * pricePerPerson;
+        if (priceDisplayTourism) priceDisplayTourism.textContent = totalPrice.toLocaleString() + ' บาท';
+    }
+
+    if (plusBtnTourism && minusBtnTourism && qtyInputTourism && priceDisplayTourism) {
+        plusBtnTourism.addEventListener('click', () => {
+            let qty = parseInt(qtyInputTourism.value) || 1;
+            qtyInputTourism.value = qty + 1;
+            updatePriceTourism();
+        });
+
+        minusBtnTourism.addEventListener('click', () => {
+            let qty = parseInt(qtyInputTourism.value) || 1;
+            if (qty > 1) {
+                qtyInputTourism.value = qty - 1;
+                updatePriceTourism();
+            }
+        });
+
+        qtyInputTourism.addEventListener('input', () => {
+            updatePriceTourism();
+        });
+    }
+
 });
+
+
