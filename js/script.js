@@ -19,22 +19,34 @@ let liffInitPromise = (async () => {
     }
 })();
 
-function showDetailPage() {
-    document.getElementById('page-list').style.display = 'none';
-    document.getElementById('page-detail').style.display = 'flex';
+const ALL_PAGES = ['page-home', 'page-list', 'page-detail', 'page-detail-tourism', 'page-diy-detail'];
+
+function showPage(pageId) {
+    ALL_PAGES.forEach(id => {
+        document.getElementById(id).style.display = (id === pageId) 
+            ? (id === 'page-home' ? 'flex' : 'flex') 
+            : 'none';
+    });
 }
 
-function showTourismDetailPage() {
-    document.getElementById('page-list').style.display = 'none';
-    document.getElementById('page-detail-tourism').style.display = 'flex';
-}
+function showDetailPage() { showPage('page-detail'); }
+function showTourismDetailPage() { showPage('page-detail-tourism'); }
+function showDiyDetailPage() { showPage('page-diy-detail'); }
+function showHomePage() { showPage('page-home'); }
+function showListPage() { showPage('page-list'); }
 
-function showListPage() {
-    document.getElementById('page-detail').style.display = 'none';
-    document.getElementById('page-detail-tourism').style.display = 'none';
-    document.getElementById('page-list').style.display = 'flex';
+function showComingSoon() {
+    const popup = document.createElement('div');
+    popup.className = 'coming-soon-popup';
+    popup.innerHTML = `
+        <div class="coming-soon-card">
+            <p>แพ็กเกจนี้กำลังจะเปิดให้จองทางช่องทางนี้เร็วๆ นี้ครับ/ค่ะ</p>
+            <button id="comingSoonOkBtn">รับทราบ</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+    document.getElementById('comingSoonOkBtn').onclick = () => popup.remove();
 }
-
 
 // 3. ฟังก์ชันส่งข้อมูลการจอง
 async function submitBooking(event) {
@@ -1360,6 +1372,17 @@ function selectHotel(type, name) {
     backLink.addEventListener('click', (e) => {
         e.preventDefault();
         showListPage();
+        
+    });
+
+    const backLinkList = document.getElementById('back-link-list');
+    backLinkList.addEventListener('click', (e) => {
+        e.preventDefault();
+        showDiyDetailPage();
+    });
+
+    document.getElementById('diy-tab-list').addEventListener('click', () => {
+    showListPage();
     });
 
     const tourismLink = document.getElementById('tourism-link');
@@ -1371,14 +1394,28 @@ function selectHotel(type, name) {
         showListPage();
     });
 
+        // ----- ผูกการ์ดหน้า Home -----
+    document.getElementById('fullpackage-link').addEventListener('click', showComingSoon);
+    document.getElementById('plus-link').addEventListener('click', showComingSoon);
+    document.getElementById('diy-link').addEventListener('click', showDiyDetailPage);
+
         // ----- ฟิลเตอร์โรงแรมตามดาว -----
     document.getElementById('makkahPickerTrigger').addEventListener('click', () => openHotelPicker('makkah'));
     document.getElementById('madinahPickerTrigger').addEventListener('click', () => openHotelPicker('madinah'));
 
-    // ล็อกการ์ดไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
-    umrahLink.style.pointerEvents = 'none';
-    umrahLink.style.opacity = '0.5';
+    document.getElementById('diy-detail-continue-btn').addEventListener('click', showListPage);
+    document.getElementById('back-link-diy-detail').addEventListener('click', (e) => {
+        e.preventDefault();
+        showHomePage();
+    });
 
+    // ล็อกการ์ดไว้ก่อน ไม่ให้กดจนกว่าเพจจะโหลดครบจริง (รวมรูปภาพ)
+    const homeCards = [
+        document.getElementById('fullpackage-link'),
+        document.getElementById('diy-link'),
+        document.getElementById('plus-link')
+    ];
+    homeCards.forEach(c => { c.style.pointerEvents = 'none'; c.style.opacity = '0.5'; });
     // ----- แสดง % โหลดจากจำนวนรูปภาพจริง -----
     const overlay = document.getElementById('loading-overlay');
     const percentText = document.getElementById('loading-percent');
@@ -1396,16 +1433,14 @@ function selectHotel(type, name) {
 
         if (loadedCount >= total) {
             overlay.classList.add('hidden');
-            umrahLink.style.pointerEvents = 'auto';
-            umrahLink.style.opacity = '1';
+            homeCards.forEach(c => { c.style.pointerEvents = 'auto'; c.style.opacity = '1'; });
         }
     }
 
     if (total === 0) {
         // ไม่มีรูปให้นับ ปลดล็อกทันที
         overlay.classList.add('hidden');
-        umrahLink.style.pointerEvents = 'auto';
-        umrahLink.style.opacity = '1';
+        homeCards.forEach(c => { c.style.pointerEvents = 'auto'; c.style.opacity = '1'; });
     } else {
         images.forEach((img) => {
             if (img.complete) {

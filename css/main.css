@@ -473,3 +473,488 @@ body {
     min-height: 14px;
     display: block;
 }
+
+/* =========================================================
+   หน้า Home (page-home) — การ์ดรวมแพ็กเกจอุมเราะห์ 3 แบบ
+   ========================================================= */
+
+.home-container {
+    height: auto;
+    min-height: 546px;
+    padding-bottom: 0;
+}
+
+.home-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.home-card {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 338px;          /* กำหนดตายตัวตาม spec แทน width: 100% */
+    height: 207px;          /* กำหนดตายตัวตาม spec แทน min-height */
+    align-items: stretch;   /* ยังเก็บไว้ กันปัญหารูปหายแล้วดันความสูงเพี้ยน */
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    margin: 0 auto;         /* ล็อคการ์ดให้อยู่กึ่งกลาง container (390px) เพราะการ์ดแคบกว่าเต็มความกว้างแล้ว */
+}
+
+/* 1. การ์ด Full Package */
+.home-card--bg-fullpkg {
+    width: 338px;
+    height: 207px;
+}
+
+
+/* 3. การ์ด Plus (ใน HTML ยังไม่มีคลาสเฉพาะ ต้องเพิ่ม class="home-card--size-plus" เข้าไปในแท็ก div ก่อน) */
+.home-card--size-plus {
+    width: 338px;
+    height: 207px;
+}
+
+.home-card--reverse {
+    flex-direction: row-reverse;
+}
+
+.home-card--light {
+    background: linear-gradient(160deg, #bdeec2 0%, #7fc98a 100%);
+}
+
+.home-card-img {
+    flex: 0 0 42%;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+
+}
+
+
+.home-card--dark .home-card-img {
+    border-radius: 32px;
+    margin: 6px;   /* ปรับค่าของการ์ดสีเข้ม (Full Package, DIY) แยกจากกัน */
+}
+
+.home-card--light .home-card-img {
+    border-radius: 32px;
+    margin: 6px;   /* ปรับค่าของการ์ดสีอ่อน (Plus) แยกจากกัน */
+}
+
+.home-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 14px;
+}
+
+.home-card-title {
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.home-card--dark .home-card-title { color: #ffffff; }
+.home-card--light .home-card-title { color: #163a1f; }
+
+.home-card-desc {
+    font-size: 9.5px;
+    line-height: 1.5;
+}
+
+.home-card--dark .home-card-desc { color: #d9ecdc; }
+.home-card--light .home-card-desc { color: #1f4527; }
+
+.home-card-price {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.home-card--dark .home-card-price {
+    background: #7fd085;
+    color: #10310f;
+}
+
+.home-card--light .home-card-price {
+    background: #1b4b27;
+    color: #ffffff;
+}
+
+.home-footer {
+    margin: 4px -12px 0 -12px;   /* เพิ่ม - หักล้าง padding ซ้าย-ขวาของ mobile-container */
+    border-radius: 0 45px 0 0;   /* เปลี่ยนจาก 20px 20px 0 0 เป็น 0 มุมซ้ายบน, 45px มุมขวาบน */
+    overflow: hidden;
+}
+
+.home-footer-info {
+    background-color: #eaeaea;
+    padding: 16px 0 20px 0;       /* เปลี่ยนจาก 18px ซ้าย-ขวา เป็น 0 ให้พื้นหลังเต็มขอบ */
+    border-radius: 0 45px 0 0;   /* เปลี่ยนแบบเดียวกัน ให้ตรงกัน */
+}
+
+.home-footer-info p {
+    font-size: 9.5px;
+    color: #444444;
+    line-height: 1.6;
+    padding: 0 18px;               /* เพิ่ม - เอา padding เดิมมาไว้ที่ตัวข้อความแทน กันไม่ให้ตัวหนังสือชิดขอบจนอ่านยาก */
+
+}
+
+.home-footer-phone {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    font-weight: 400;
+    color: #444444;
+}
+
+.home-footer-copyright {
+    background-color: #9a9a9a;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    padding: 8px 0;
+}
+
+.coming-soon-popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.coming-soon-card {
+    background: #ffffff;
+    padding: 26px 24px;
+    border-radius: 22px;
+    max-width: 260px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.coming-soon-card p {
+    font-size: 13px;
+    color: #333333;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.coming-soon-card button {
+    padding: 10px 22px;
+    background: #1b4b27;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Header เฉพาะหน้า Home — แถบใหญ่ชิดขอบบน-ซ้าย-ขวา */
+.home-header-bar {
+    width: auto;
+    margin: -16px -12px 0 -12px;
+    padding: 12px 16px;
+    height: 78px;
+    border-radius: 12px 12px 0 0;
+    align-items: flex-end;
+}
+
+/* มุมโค้งเฉพาะ: Full Package + Plus ใช้แบบเดียวกัน (รูปอยู่ซ้าย) */
+.home-card--radius-a {
+    border-radius: 59px 55px 0px 55px;
+}
+
+/* มุมโค้งเฉพาะ DIY: mirror กลับด้าน เพราะรูปอยู่ขวาแทน */
+.home-card--radius-b {
+    border-radius: 55px 59px 55px 0px;
+}
+
+/* สีพื้นหลังเฉพาะ Full Package */
+.home-card--bg-fullpkg {
+    background: #113b14;
+}
+
+/* สีพื้นหลังเฉพาะ DIY */
+.home-card--bg-diy {
+    background: #4F9454;
+}
+
+/* Price pill เฉพาะ Full Package ตาม spec: W161 H31, สี #4F9454, มุมมน mixed */
+.home-card-price.home-card-price--fullpkg {
+    width: 161px;
+    height: 31px;
+    background: #3B6F3F;
+    border-radius: 24px 18px 0px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #ffffff;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* หัวข้อ + คำอธิบายเฉพาะ Full Package ตาม spec */
+.home-card-title.home-card-title--fullpkg {
+    font-size: 24px;
+}
+
+.home-card-desc.home-card-desc--fullpkg {
+    font-size: 7px;
+    font-weight: 400;   /* regular */
+    font-style: normal;
+    color: #ffffff;   /* เปลี่ยนโค้ดสีตรงนี้เป็นสีที่ต้องการ */
+
+}
+
+/* Price pill เฉพาะ DIY: mirror จาก fullpkg ตาม spec (18/24/24/0) */
+.home-card-price.home-card-price--diy {
+    width: 161px;
+    height: 31px;
+    background: #3B6F3F;
+    border-radius: 17px 24px 24px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #ffffff;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 11px;
+}
+
+/* ขยายเฉพาะกรอบรูป DIY ให้ใหญ่ขึ้น */
+.home-card-img--diy {
+    flex: 0 0 40%;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin: 0;              /* เพิ่ม - ยกเลิก margin ที่สร้างกรอบ */
+    border-radius: 0;       /* เพิ่ม - ยกเลิกความมนของกรอบ */
+    overflow: visible;      /* เพิ่ม - ให้รูปโผล่ออกนอกพื้นที่ flex ได้ ไม่ถูกตัด */
+}
+
+/* จุดที่ 2 - แก้ตรงนี้ (ท้ายไฟล์) */
+.home-card-img--diy img {
+    width: 143px;                          /* ปรับขนาดรูปให้เล็กลงตามภาพ 2 */
+    height: auto;
+    position: absolute;
+    bottom: 0;                              /* เพิ่ม - ดันรูปไปชิดขอบล่าง */
+    right: 0px;                            /* เพิ่ม - ดันรูปไปชิดขอบขวา */
+    transform: scale(1);
+    object-position: 5% 80%;
+}
+
+.home-card--size-diy {
+    width: 338px;    /* ลดจาก 338px */
+    height: 207px;   /* ลดจาก 207px */
+}
+
+.home-card-title--diy {
+    font-size: 24px;
+    margin-left: 12px;   /* คงค่าเดิมไว้ถ้ายังต้องการขยับตำแหน่งด้วย ลบทิ้งได้ถ้าไม่ต้องการ */
+
+}
+
+.home-card-desc--diy.home-card-desc--diy {
+    font-size: 7px;
+    color: #ffffff;   /* เปลี่ยนโค้ดสีตรงนี้เป็นสีที่ต้องการ */
+}
+
+.home-card-title--plus.home-card-title--plus {
+    font-size: 24px;
+}
+
+
+
+.home-card-body--plus.home-card-body--plus {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 18px;
+    transform: translateX(-15px);   /* เพิ่ม - ขยับทั้งกลุ่มข้อความไปทางซ้าย ปรับตัวเลขได้ */
+
+}
+
+.home-card-desc--plus.home-card-desc--plus {
+    font-size: 7px;
+    color: #000000;
+    text-align: center;
+    line-height: 1.7;
+    display: block;         /* ยกเลิก line-clamp เดิมที่เคยจำกัด 4 บรรทัด */
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+.home-card-price--plus.home-card-price--plus {
+    font-size: 14px;
+    font-weight: 600;
+    font-style: italic;
+    align-self: center;
+    background: #6FB474;
+    color: #ffffff;
+    width: 161px;                /* เพิ่ม - กำหนดความกว้างตายตัว */
+    height: 31px;                 /* เพิ่ม - กำหนดความสูงตายตัว */
+    display: flex;                /* เพิ่ม - จัดข้อความให้อยู่กึ่งกลางกรอบ */
+    align-items: center;
+    justify-content: center;
+    padding: 0;                   /* เปลี่ยนจาก padding เดิม เพราะตอนนี้คุมขนาดด้วย width/height แทน */
+    white-space: nowrap;
+    border-radius: 30px;
+    border-radius: 30px 18px 0px 30px;   /* บนซ้าย บนขวา ล่างขวา ล่างซ้าย */
+
+}
+
+.diy-doc-stack {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin: 12px 0;
+}
+
+.diy-doc-img {
+    position: absolute;
+    width: 55%;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    left: 15%;
+}
+
+.diy-doc-img--back {
+    top: 0;
+    transform: rotate(-6deg);
+    z-index: 1;
+}
+
+.diy-doc-img--front {
+    top: 10px;
+    transform: rotate(4deg);
+    z-index: 2;
+}
+
+.diy-price-card {
+    background: linear-gradient(160deg, #2e6b3c 0%, #143a1e 100%);
+    border-radius: 24px;
+    padding: 16px;
+    color: #ffffff;
+    text-align: left;
+    position: relative;   /* เพิ่ม */
+    overflow: visible;    /* เพิ่ม กันปุ่มโดนตัด */
+
+}
+
+.diy-price-title {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 700;
+}
+
+.diy-price-desc {
+    font-size: 10px;
+    margin: 6px 0;
+    color: #d9ecdc;
+}
+
+.diy-price-tag {
+    display: inline-block;
+    background: #7fd085;
+    color: #10310f;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 16px;
+    margin-top: 4px;
+}
+
+.diy-price-plus {
+    position: absolute;
+    bottom: -16px;
+    right: -10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #7fd085;
+    color: #10310f;
+    border: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+.diy-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.diy-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cccccc;
+}
+
+.diy-dots .dot.active {
+    background: #1b4b27;
+}
+
+/* พื้นหลังหน้า DIY Detail ให้เป็นสีเทาอ่อนแทนสีขาว + ไม่บังคับสูง 844px */
+#page-diy-detail {
+    height: auto;
+    min-height: 546px;
+    background-color: #f4f4f4;
+}
+
+#page-diy-detail {
+    height: auto;
+    min-height: 546px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #DADADA 100%);
+}
+
+.diy-tabs {
+    display: flex;
+    gap: 6px;
+    background: #eaeaea;
+    border-radius: 20px;
+    padding: 4px;
+    width: fit-content;
+    margin: 0 auto;
+}
+.diy-tab {
+    font-size: 11px;
+    padding: 8px 14px;
+    border-radius: 16px;
+    color: #666;
+    cursor: pointer;
+}
+.diy-tab--active {
+    background: #ffffff;
+    color: #1b4b27;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}

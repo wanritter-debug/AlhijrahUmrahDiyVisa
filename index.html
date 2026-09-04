@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
     <title>วีซ่าอุมเราะห์ ซาอุดีอาระเบีย</title>
 
     <link rel="stylesheet" href="css/main.css">
@@ -65,13 +66,111 @@
         <div class="loading-label">ขอเวลาสักครู่นะครับ/นะคะ</div>
     </div>
 
-    <!-- ============ หน้า 1: รายการการ์ด ============ -->
-    <div class="mobile-container" id="page-list">
-        <header class="header-bar">
+    <!-- ============ หน้า 0: หน้าแรก (Home) รวมแพ็กเกจ ============ -->
+    <div class="mobile-container home-container" id="page-home">
+        <header class="header-bar home-header-bar">
             <div class="logo">
                 <img src="img/logo-with-text white 1.svg" alt="ALHURAH LTD PART.">
             </div>
-            <div class="header-title">วีซ่า ซาอุดิอาระเบีย</div>
+        </header>
+
+        <main class="home-card-list">
+            <div class="home-card home-card--dark home-card--radius-a home-card--bg-fullpkg" id="fullpackage-link" style="cursor:pointer;">
+                <div class="home-card-img">
+                    <img src="img/Group 13.svg" alt="อุมเราะห์ Full Package">
+                </div>
+                <div class="home-card-body">
+                    <h2 class="home-card-title home-card-title--fullpkg">อุมเราะห์ FULL<br>PACKAGE</h2>
+                    <p class="home-card-desc home-card-desc--fullpkg">"อุมเราะห์ Full Package" คือ แพ็กเกจอุมเราะห์แบบ "จ่ายจบ ครบทุกสิ่ง" ดูแลตั้งแต่ตั๋วเครื่องบิน วีซ่า ที่พัก อาหาร การเดินทาง พร้อมมีเจ้าหน้าที่ (แซะห์/มูตอวิฟ) คอยดูแลแนะนำตลอดทริปโดยไม่มีค่าใช้จ่ายเพิ่มเติม</p>                <div class="home-card-price home-card-price--fullpkg">เริ่มต้นที่ 59,000 บาท</div>                </div>
+            </div>
+
+            <div class="home-card home-card--dark home-card--radius-b home-card--bg-diy home-card--size-diy" id="diy-link" style="cursor:pointer;">
+                <div class="home-card-body">
+                    <h2 class="home-card-title home-card-title--diy">อุมเราะห์ DIY</h2>
+                    <p class="home-card-desc home-card-desc--diy">"อุมเราะห์ DIY" คือ แพ็กเกจอุมเราะห์แบบไปเอง "เลือกจัดสรรได้ตามใจคุณ" ต้องการวางแผนและรูปแบบการเดินทางด้วยตนเอง
+                    อย่างอิสระ แต่ต้องการความช่วยเหลือจากผู้เชี่ยวชาญ
+                    เหมาะกับคนที่เคยไปประกอบพิธีอุมเราะห์แล้วและอยาก
+                    เดินทางเอง</p>
+                    <div class="home-card-price home-card-price--diy">วีซ่าซาอุเริ่มต้น 5,900 บาท</div>
+                </div>
+                <div class="home-card-img home-card-img--diy">
+                    <img src="img/Group 14.svg" alt="อุมเราะห์ DIY">
+                </div>
+            </div>
+
+            <div class="home-card home-card--light home-card--radius-a" id="plus-link" style="cursor:pointer;">
+                <div class="home-card-img">
+                    <img src="img/Group 15.svg" alt="อุมเราะห์ Plus">
+                </div>
+                <div class="home-card-body home-card-body--plus">
+                    <h2 class="home-card-title home-card-title--plus">อุมเราะห์ Plus</h2>
+                    <p class="home-card-desc home-card-desc--plus">"อุมเราะห์ Plus" คือ แพ็กเกจแสวงบุญแบบ Full Package ที่ "รวมทริปแสวงบุญและการท่องเที่ยวไว้ในหนึ่งเดียว" โดยหลังจากเสร็จสิ้นพิธีอุมเราะห์แล้ว จะพาท่านเดินทางไปท่องเที่ยวและศึกษาประวัติศาสตร์ต่อยังประเทศใน
+                    แถบตะวันออกกลางหรือประเทศใกล้เคียง เช่น อียิปต์ หรือตุรกี เที่ยวครบ จบในทริปเดียว</p>
+                    <div class="home-card-price home-card-price--plus">เริ่มต้นที่ 88,900 บาท</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="home-footer">
+            <div class="home-footer-info">
+                <p>TAT LIC. 41/00198</p>
+                <p>IATA LIC. 35-3 0728 5</p>
+                <p>UMRAH VISA LIC. 18115</p>
+                <p>HAJJ LIC. 23/2555</p>
+                <p>MONEYEXCHANGE LIC. 225480054</p>
+                <p class="home-footer-phone">0887882546 / 0987039368 / 0818962464</p>
+                <p>สำนักงานใหญ่ : 54 ม.4 ต.ตอนรัก อ.หนองจิก จ.ปัตตานี 94170</p>
+                <p>สาขาย่อย : 82/2 ถ.ยะรัง ต.อาเนาะรู อ.เมือง จ.ปัตตานี 94000 (สาขามัสยิดกลาง)</p>
+            </div>
+            <div class="home-footer-copyright">Copyright 2026</div>
+        </footer>
+    </div>
+
+    <!-- ============ หน้าใหม่: รายละเอียดวีซ่า DIY (คั่นระหว่าง Home กับ page-list) ============ -->
+    <div class="mobile-container detail-container" id="page-diy-detail" style="display:none;">
+        <div class="header-bar detail-header">
+            <a href="#" class="back-btn" id="back-link-diy-detail">
+                <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
+            </a>
+            <span class="header-title">อุมเราะห์ DIY</span>
+        </div>
+        
+        <div class="diy-tabs">
+            <span class="diy-tab" id="diy-tab-list">รายการที่เลือก</span>
+            <span class="diy-tab diy-tab--active">วีซ่า</span>
+        </div>
+
+        <div class="diy-doc-stack">
+            <img src="img/Group 16.svg" alt="เอกสาร" class="diy-doc-img diy-doc-img--back">
+        </div>
+
+        <div class="diy-price-card">
+            <h2 class="diy-price-title">วีซ่า</h2>
+            <p class="diy-price-desc">การยกเว้นวีซ่าไปยังประเทศซาอุดีอาระเบียแล้วเดินทางเข้าไปเอง</p>
+            <div class="diy-price-tag">ราคาเริ่มต้นที่ 5,900 บาท</div>
+            <button type="button" class="diy-price-plus" id="diy-price-plus-btn">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <div class="diy-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
+        <button type="button" class="btn-submit" id="diy-detail-continue-btn">ดำเนินการ</button>
+    </div>
+
+    <!-- ============ หน้า 1: รายการการ์ด ============ -->
+    <div class="mobile-container" id="page-list" style="display:none;">        
+        <header class="header-bar detail-header">
+            <a href="#" class="back-btn" id="back-link-list">
+                <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
+            </a>
+            <span class="header-title">วีซ่า ซาอุดิอาระเบีย</span>
         </header>
 
         <main class="card-list">
