@@ -1375,6 +1375,154 @@ function selectHotel(type, name) {
         
     });
 
+    const DIY_CATEGORIES = [
+        { id: 'visa',   title: 'วีซ่า',        desc: 'ทางเราเป็นผู้ประสานงานขอวีซ่าไปยังประเทศซาอุดีอาระเบียโดยตรง', price: 'ราคาเริ่มต้นที่ 5,900 บาท', icon: 'fa-passport', hasDocStack: true },
+        { id: 'flight', title: 'ตั๋วเครื่องบิน', desc: 'จองสายการบินชั้นนำโดยผู้เชี่ยวชาญ และพร้อมให้คำแนะนำตามทุกความประสงค์ของคุณ', price: 'ราคาเริ่มต้นที่ 3,500 บาท', hasPlaneImg: true, cardStyle: 'light' },        
+        { id: 'car', title: 'รถ', 
+        desc: 'สำหรับเดินทางในประเทศ สำหรับรับส่งสนามบิน หรือซียาเราะห์', 
+        price: 'ราคาเริ่มต้นที่ -- บาท', 
+        hasCarImg: true,
+        cardStyle: 'car' },
+        { id: 'hotel', title: 'ที่พัก', 
+        desc: 'บริการของที่พักราคาประหยัด จนไปถึง 5 ดาว', 
+        price: 'ราคาเริ่มต้นที่ -- บาท', 
+        hasHotelImg: true,
+        cardStyle: 'hotel' },
+        { id: 'food', title: 'อาหาร', 
+        desc: 'บริการอาหารแบบเซตบ็อกและบุฟเฟ่ย์สไตล์ อินโด ', 
+         price: 'ราคาเริ่มต้นที่กล่องละ -- บาท', 
+        hasFoodImg: true,
+        cardStyle: 'food' },        
+        { id: 'guide', title: 'มูตอวิฟ', 
+            desc: 'พาทำอุมเราะห์โดยผู้มีประสบการณ์', 
+            price: 'ราคาเริ่มต้นที่ -- บาท', 
+            hasGuideImg: true,
+            cardStyle: 'guide' },    
+    ];
+
+    const selectedDiyItems = new Set();
+
+    function buildCategoryMedia(cat) {
+        if (cat.hasDocStack) {
+            return `
+                <div class="diy-doc-stack">
+                    <img src="img/Group 16.svg" alt="เอกสาร" class="diy-doc-img diy-doc-img--back">
+                </div>`;
+
+        }
+        if (cat.hasPlaneImg) {   // เพิ่มเงื่อนไขใหม่
+            return `
+                <div class="diy-plane-frame">
+                    <img src="img/aa 1.svg" alt="ตั๋วเครื่องบิน">
+                </div>`;
+
+        }
+        if (cat.hasCarImg) {   // ← เพิ่มใหม่
+            return `<div class="diy-car-frame">
+                <img src="img/Group 17.svg" alt="รถ">
+            </div>`;
+    
+        }
+
+        if (cat.hasHotelImg) {   // ← เพิ่มตรงนี้ด้วย
+            return `<div class="diy-hotel-frame">
+                <img src="img/2bccb986 2.svg" alt="ที่พัก">
+            </div>`;
+        }
+
+        if (cat.hasFoodImg) {
+            return `<div class="diy-food-frame">
+                <img src="img/20260709_195126 2.svg" alt="อาหาร">
+            </div>`;
+        }
+
+        if (cat.hasGuideImg) {
+            return `<div class="diy-guide-frame">
+                <img src="img/482213693_1595903955134083_1501763222359019617_n 1.svg" alt="มูตอวิฟ">
+            </div>`;
+        }
+
+        return `
+            <div class="diy-photo-frame">
+                <i class="fa-solid ${cat.icon} diy-photo-icon"></i>
+            </div>`;
+    }
+
+    function renderDiyCarousel() {
+        const carousel = document.getElementById('diy-carousel');
+        const dotsContainer = document.getElementById('diy-dots');
+        if (!carousel || !dotsContainer) return;
+
+        carousel.innerHTML = '';
+        dotsContainer.innerHTML = '';
+
+        DIY_CATEGORIES.forEach((cat, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'diy-slide';
+            slide.dataset.id = cat.id;
+            slide.innerHTML = `
+                ${buildCategoryMedia(cat)}
+                <div class="diy-price-card ${cat.cardStyle ? 'diy-price-card--' + cat.cardStyle : ''}">
+                    <h2 class="diy-price-title">${cat.title}</h2>
+                    <p class="diy-price-desc">${cat.desc}</p>
+                    <div class="diy-price-tag">${cat.price}</div>
+                    <button type="button" class="diy-price-plus" data-id="${cat.id}">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            `;
+            carousel.appendChild(slide);
+
+            const dot = document.createElement('span');
+            dot.className = 'dot' + (index === 0 ? ' active' : '');
+            dotsContainer.appendChild(dot);
+        });
+
+        carousel.querySelectorAll('.diy-price-plus').forEach(btn => {
+            btn.addEventListener('click', () => toggleDiyItem(btn.dataset.id, btn));
+        });
+    }
+
+    function toggleDiyItem(id, btnEl) {
+        if (selectedDiyItems.has(id)) {
+            selectedDiyItems.delete(id);
+            btnEl.classList.remove('added');
+            btnEl.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        } else {
+            selectedDiyItems.add(id);
+            btnEl.classList.add('added');
+            btnEl.innerHTML = '<i class="fa-solid fa-check"></i>';
+        }
+        updateDiySelectedCount();
+    }
+
+    function updateDiySelectedCount() {
+        const countEl = document.getElementById('diy-selected-count');
+        if (!countEl) return;
+        const count = selectedDiyItems.size;
+        countEl.textContent = count > 0 ? count : '';
+    }
+
+    function updateDiyActiveDot(index) {
+        const dots = document.querySelectorAll('#diy-dots .dot');
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        const currentTab = document.getElementById('diy-tab-current');
+        if (currentTab && DIY_CATEGORIES[index]) {
+            currentTab.textContent = DIY_CATEGORIES[index].title;
+        }
+    }
+
+        renderDiyCarousel();
+
+        const carousel = document.getElementById('diy-carousel');
+        if (carousel) {
+            carousel.addEventListener('scroll', () => {
+                const slideWidth = carousel.clientWidth;
+                const index = Math.round(carousel.scrollLeft / slideWidth);
+                updateDiyActiveDot(index);
+            });
+        }
+
     const backLinkList = document.getElementById('back-link-list');
     backLinkList.addEventListener('click', (e) => {
         e.preventDefault();
