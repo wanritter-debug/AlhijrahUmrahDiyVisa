@@ -1569,7 +1569,7 @@ function selectHotel(type, name) {
     const percentText = document.getElementById('loading-percent');
     const barFill = document.getElementById('loading-bar-fill');
 
-    const images = Array.from(document.querySelectorAll('#page-home img'));
+    const images = Array.from(document.images); // นับรูปทั้งหมดในหน้า (ทั้งสอง section)
     const total = images.length;
     let loadedCount = 0;
 
